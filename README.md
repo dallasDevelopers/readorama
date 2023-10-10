@@ -31,14 +31,14 @@ We collaborate with educators, NGOs, and government bodies to launch literacy in
 1. Landing Page/ Main Page (user & admin)
 Navbar: 
 2. Book: (Dropdown)
-    a. book search
-    b. top rated books
-    c. review books 
+- book search
+- top rated books
+- review books 
 
 3. Account: (Dropdown )
-    a. Home 
-    b. Profile 
-    c. Read List
-    d. Likes
+- Home 
+- Profile 
+- Read List
+- Likes
 
 4. Review page
