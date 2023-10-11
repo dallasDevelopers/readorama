@@ -40,3 +40,7 @@ Navbar:
 - Likes
 
 4. Review page
+
+
+## Source of the book catalog dataset:
+[Google Books API](https://developers.google.com/books/)
