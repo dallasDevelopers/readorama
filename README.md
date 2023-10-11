@@ -17,8 +17,6 @@ At Readorama, our primary goal is to provide accessible, engaging, and high-qual
 **User-Friendly Interface:**
 Our website is designed to be user-friendly and accessible, ensuring that individuals with varying levels of digital literacy can easily navigate and benefit from our resources.
 
-**Literacy Initiatives:**
-We collaborate with educators, NGOs, and government bodies to launch literacy initiatives and programs that reach underserved communities. By addressing the unique challenges faced by different regions, we aim to bridge the literacy gap.
 
 ## Roles
 1. User 
