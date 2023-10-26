@@ -14,7 +14,25 @@
             </div>
             <div class="card-body">
                 <form method="POST" value="add_review">
-                    {{  form.as_table }}
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="books">Books</label>
+                        <input type="text" name="books" class="form-control" id="books">
+                    </div>
+                    <div class="form-group">
+                        <label for="review_title">Review Title</label>
+                        <input type="text" name="review_title" class="form-control" id="review_title">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Review</label>
+                        <textarea class="form-control" name="review" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="review_title">Rating</label>
+                        <input type="number" name="rating" class="form-control" id="rating">
+                    </div>
+                    <!-- {{ form.as_table }} -->
+                    <button class="btn btn-primary" type="submit">Add Review</button>
                 </form>
             </div>
         </div>
