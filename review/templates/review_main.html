@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %} Datatables {% endblock title %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary card-header-icon">
+                <h4 class="card-title">{{ appname }}</h4>
+            </div>
+            <div class="card-body">
+                <table class="table" id="'product_table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Review Title</th>
+                            <th scope="col">Book Title</th>
+                            <th scope="col">Review</th>
+                            <th scope="col">Rating</th>
+                            <th scope="col">Date Added</th>
+                            <th scope="col">Edit Review</th>
+                        </tr>
+                    </thead>
+
+                    {% for review in reviews %}
+                    <tbody>
+                        <tr>
+                            <td>{{ review.review_title }}</td>
+                            <td>{{ review.books }}</td>
+                            <td>{{ review.review }}</td>
+                            <td>{{ review.rating_new }}</td>
+                            <td>{{ review.date_added }}</td>
+                            <td>
+                                <!-- Edit Button -->
+                            </td>
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>                
+                <!-- Add Review Button -->
+                <a href="{% url 'review:add_reviews' %}">
+                    <button type="button">Add Review</button>
+                </a>
+
+                <p>You have contributed on {{ review_count }} reviews </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+
+{% endblock javascripts %}

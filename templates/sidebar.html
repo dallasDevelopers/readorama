@@ -12,5 +12,13 @@
                 </a>
             </div>
         </div>
+        <ul class="nav">
+            <li class="nav-item {% if 'index' in segment %} active {% endif %}">
+                <a class="nav-link" href="{% url 'review:review_main' %}">
+                    <i class="material-icons">add</i>
+                    <p> Review </p>
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
