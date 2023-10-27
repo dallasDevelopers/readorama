@@ -13,7 +13,7 @@
         <h4 class="card-title">{{ appname }}</h4>
       </div>
       <div class="card-body">
-        <table class="table" id="'product_table">
+        <table class="table" id="product_table">
           <thead>
             <tr>
               <th scope="col">Book Title</th>
@@ -29,10 +29,30 @@
           </tbody>
           {% endfor %}
         </table>
-        <a href="{% url 'wishlist:add_wishlist' %}">
-          <button type="button" class="btn btn-success">Add a book to yout wishlist</button>
+        <a>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Want To Add Books to
+            Your Wishlist?</button>
         </a>
-        <p>You have {{ wishlist_count }} books on your wishlist!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="myModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Wishlist</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>To add a book, simply go to the main page and hover over a book you want to add, then click on the
+          button to add them to your wishlist! It's that simple.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
