@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %} Datatables {% endblock title %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header card-header-primary card-header-icon">
+        <h4 class="card-title">{{ appname }}</h4>
+      </div>
+      <div class="card-body">
+        <table class="table" id="'product_table">
+          <thead>
+            <tr>
+              <th scope="col">Book Title</th>
+              <th scope="col">Have You Read This?</th>
+            </tr>
+          </thead>
+          {% for wishlists in wishlist %}
+          <tbody>
+            <tr>
+              <td>{{ wishlist.book_name }}</td>
+              <td>{{ wishlist.flag }}</td>
+            </tr>
+          </tbody>
+          {% endfor %}
+        </table>
+        <a href="{% url 'wishlist:add_wishlist' %}">
+          <button type="button" class="btn btn-success">Add a book to yout wishlist</button>
+        </a>
+        <p>You have {{ wishlist_count }} books on your wishlist!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+
+{% endblock javascripts %}
