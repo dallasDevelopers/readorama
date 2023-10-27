@@ -17,9 +17,12 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='/login')
 def show_main(request):
+
+    dataAll = Books.objects.all().order_by('-rating')
     
     context = {
         'appname': 'ReadORama',
+        'datas': dataAll,
     }
 
     return render(request, 'main.html', context)
