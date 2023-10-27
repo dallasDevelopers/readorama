@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %} Datatables {% endblock title %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<h3>Read Page</h3>
+
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th class="text-center"></th>
+            <th class="text-center"></th>
+            <th class="text-center"></th>
+            <th class="text-right"></th>
+        </tr>
+    </thead>
+    <tbody> <!-- nanti ganti pake iteration -->
+        <tr>
+            <td class="text-center">1</td>
+            <td class= "text-center"> 
+                <img src="https://upload.wikimedia.org/wikipedia/id/thumb/b/bf/Harry_Potter_and_the_Sorcerer%27s_Stone.jpg/220px-Harry_Potter_and_the_Sorcerer%27s_Stone.jpg" alt="Harry-Potter-Book-Cover" width="100" height="160"> 
+            </td>
+            <td>Harry Potter and the Philosopher's Stone</td>
+            <td class="td-actions text-right">
+                <!-- url sementara gatau -->
+                <a> 
+                    <button type="button" rel="tooltip" class="btn btn-success">
+                        <i class="material-icons">edit</i>
+                    </button>
+                </a>
+
+                <p>Review</p>
+
+                <br />
+
+                <!-- url sementara gatau -->
+                <a>
+                    <button type="button" rel="tooltip" class="btn btn-danger">
+                        <i class="material-icons">close</i>
+                    </button>
+                </a>
+
+                <p>Delete</p>
+
+            </td>
+        </tr>
+        <tr>
+            <td class="text-center">2</td>
+            <td class= "text-center"> 
+                <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1474169725i/15881.jpg" alt="Harry-Potter-Book-Cover2" width="100" height="160"> 
+            </td>
+            <td>Harry Potter and the Chamber of Secrets</td>
+            <td class="td-actions text-right">
+                <!-- url sementara gatau -->
+                <a> 
+                    <button type="button" rel="tooltip" class="btn btn-success">
+                        <i class="material-icons">edit</i>
+                    </button>
+                </a>
+
+                <p>Review</p>
+
+                <br />
+
+                <!-- url sementara gatau -->
+                <a>
+                    <button type="button" rel="tooltip" class="btn btn-danger">
+                        <i class="material-icons">close</i>
+                    </button>
+                </a>
+
+                <p>Delete</p>
+                
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+{% endblock content %}
+
+{% block javascripts %}
+
+{% endblock javascripts %}
