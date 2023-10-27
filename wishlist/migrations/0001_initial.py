@@ -10,19 +10,17 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('main', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('main', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Review',
+            name='Wishlist',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('review_title', models.CharField(max_length=50)),
-                ('review', models.TextField()),
-                ('date_added', models.DateField()),
-                ('rating_new', models.FloatField()),
+                ('flag', models.BooleanField(default=False)),
+                ('book_name', models.CharField(default='', max_length=100)),
                 ('books', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.books')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
