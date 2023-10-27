@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %} Datatables {% endblock title %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary card-header-icon">
+                <h4 class="card-title">{{ appname }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" value="add_review">
+                    {{  form.as_table }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+
+{% endblock javascripts %}
