@@ -21,7 +21,8 @@
                             <th scope="col">Review</th>
                             <th scope="col">Rating</th>
                             <th scope="col">Date Added</th>
-                            <th scope="col">Edit Review</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
 
@@ -34,7 +35,18 @@
                             <td>{{ review.rating_new }}</td>
                             <td>{{ review.date_added }}</td>
                             <td>
-                                <!-- Edit Button -->
+                                <a href="{% url 'review:delete_review' review.pk %}">
+                                    <button type="button" class="btn btn-danger">
+                                        Delete
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'review:edit_review' review.pk %}">
+                                    <button type="button" class="btn btn-warning">
+                                        Edit
+                                    </button>
+                                </a>
                             </td>
                         </tr>
                     </tbody>
@@ -42,7 +54,7 @@
                 </table>                
                 <!-- Add Review Button -->
                 <a href="{% url 'review:add_reviews' %}">
-                    <button type="button">Add Review</button>
+                    <button type="button" class="btn btn-primary">Add Review</button>
                 </a>
 
                 <p>You have contributed on {{ review_count }} reviews </p>

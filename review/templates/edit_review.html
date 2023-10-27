@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block title %} Datatables {% endblock title %}
@@ -17,7 +18,8 @@
                     <form method="post">
                         {% csrf_token %}
                         {{ form.as_p }}
-                        <button type="submit" class="btn btn-primary">Add Review</button>
+                        <!-- <input type="submit" value="review"> -->
+                        <button value="review" class="btn btn-primary">Edit Review</button>
                     </form>
 
 
