@@ -9,49 +9,49 @@
 <form method="POST" action="/landing-admin/edit-book/{{form.instance.id}}">
     {% csrf_token %}
     <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="name">Title</label>
+        <div class="form-group col-md-6 py-4">
+            <label for="name"><i class="material-icons">auto_stories</i>Title</label>
             <input type="text" class="form-control" name="name" id="name" value="{{form.instance.name}}">
         </div>
 
-        <div class="form-group col-md-6">
-            <label for="author">Author</label>
+        <div class="form-group col-md-6 py-4">
+            <label for="author"><i class="material-icons">face</i>Author</label>
             <input type="text" class="form-control" name="author" id="author" value="{{form.instance.author}}">
         </div>
     </div>
 
     <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="rating">Rating</label>
+        <div class="form-group col-md-6 py-4">
+            <label for="rating"><i class="material-icons">star</i>Rating</label>
             <input type="number" step="0.01" class="form-control" name="rating" id="rating" value="{{form.instance.rating}}">
         </div>
 
-        <div class="form-group col-md-6">
-            <label for="num_review">Reviews</label>
+        <div class="form-group col-md-6 py-4">
+            <label for="num_review"><i class="material-icons">reviews</i>Reviews</label>
             <input type="text" class="form-control" name="num_review" id="num_review" value="{{form.instance.num_review}}">
         </div>
     </div>
 
     <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="price">Price</label>
+        <div class="form-group col-md-6 py-4">
+            <label for="price"><i class="material-icons">attach_money</i>Price</label>
             <input type="number" class="form-control" name="price" id="price" value="{{form.instance.price}}">
         </div>
 
-        <div class="form-group col-md-6">
-            <label for="year">Year</label>
+        <div class="form-group col-md-6 py-4">
+            <label for="year"><i class="material-icons">calendar_today</i>Year</label>
             <input type="number" class="form-control" name="year" id="year" value="{{form.instance.year}}">
         </div>
     </div>
 
     <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="genre">Genre</label>
+        <div class="form-group col-md-6 py-4">
+            <label for="genre"><i class="material-icons">category</i>Genre</label>
             <input type="text" class="form-control" name="genre" id="genre" value="{{form.instance.genre}}">
         </div>
     </div>
     
-    <button value="book" type="submit" class="btn btn-primary">Edit</button>
+    <button value="book" type="submit" class="btn btn-primary"><i class="material-icons">edit</i> Edit</button>
 </form>
 
 {% endblock content %}

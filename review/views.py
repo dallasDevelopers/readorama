@@ -11,9 +11,11 @@ from django.core import serializers
 def show_reviews(request):
     review = Review.objects.filter(user=request.user)
     review_counts = review.count()
+    is_superuser = request.user.is_superuser
     context = {
         'reviews': review,
-        'review_count' : review_counts
+        'review_count' : review_counts,
+        'is_superuser' : is_superuser,
     }
 
     return render(request, 'review_main.html', context)
