@@ -24,6 +24,10 @@ def show_main(request):
 
     return render(request, 'main.html', context)
 
+def load_books(request):
+    data = Books.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
 def register(request):
     form = UserCreationForm()
     msg = None
