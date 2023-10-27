@@ -13,9 +13,14 @@
         <h4 class="card-title">{{ appname }}</h4>
       </div>
       <div class="card-body">
-        <form method="POST" value="add_review">
+        <form method="POST" value="add_wishlist">
           {{ form.as_table }}
         </form>
+      </div>
+      <div>
+        <button type="button" class="btn btn-success" method="POST" value="add_wishlist">
+          Add to Wishlist
+        </button>
       </div>
     </div>
   </div>

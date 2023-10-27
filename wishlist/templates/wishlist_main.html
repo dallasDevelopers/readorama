@@ -20,19 +20,19 @@
               <th scope="col">Have You Read This?</th>
             </tr>
           </thead>
-
-          {% for review in reviews %}
+          {% for wishlists in wishlist %}
           <tbody>
             <tr>
-              <td>{{ review.book_name }}</td>
-              <td>{{ review.flag }}</td>
+              <td>{{ wishlist.book_name }}</td>
+              <td>{{ wishlist.flag }}</td>
             </tr>
           </tbody>
           {% endfor %}
         </table>
         <a href="{% url 'wishlist:add_wishlist' %}">
           <button type="button" class="btn btn-success">Add a book to yout wishlist</button>
-          <p>You have {{ wishlist_count }} books on your wishlist!</p>
+        </a>
+        <p>You have {{ wishlist_count }} books on your wishlist!</p>
       </div>
     </div>
   </div>
