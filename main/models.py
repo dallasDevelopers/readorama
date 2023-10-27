@@ -6,6 +6,6 @@ class Books(models.Model):
     author = models.CharField(max_length=50, null=True, blank=True)
     rating = models.FloatField(null=True, blank=True)
     review = models.IntegerField(null=True, blank=True)
-    price = models.IntegerField(null=True, blank=True)
+    price = models.FloatField(null=True, blank=True)
     year = models.IntegerField(null=True, blank=True)
     genre = models.TextField(null=True, blank=True)
