@@ -3,8 +3,9 @@ from wishlist.models import Wishlist
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from main.models import Books
 
 
 # Create your views here.
@@ -65,3 +66,19 @@ def delete_product_ajax(request, id):
     product = Wishlist.objects.get(pk=id)
     product.delete()
     return HttpResponse(b"DELETED", status=201)
+
+@csrf_exempt
+def mark_as_read(request, book_id):
+    if request.method == 'POST':
+        try:
+            book = Books.objects.get(pk=book_id)
+            book.flag = 'positive'
+            book.save()
+
+            # You can send the book data to another app here
+            # For example, you can use Django's built-in signals to trigger actions in another app
+
+            return JsonResponse({'message': 'Book marked as read successfully.'})
+        except Books.DoesNotExist:
+            return JsonResponse({'message': 'Book not found.'}, status=404)
+    return JsonResponse({'message': 'Invalid request method.'}, status=400)
