@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from review.models import Review 
 from review.forms import ReviewForm, EditForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from main.models import Books
+from django.core import serializers
 
 # Create your views here.
 
@@ -54,3 +55,7 @@ def edit_review(request, id):
 
     context = {'form': form}
     return render(request, "edit_review.html", context)
+
+def get_review_json(request):
+    review_item = Review.objects.all()
+    return HttpResponse(serializers.serialize('json', review_item))

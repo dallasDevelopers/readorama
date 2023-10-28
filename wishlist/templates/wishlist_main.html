@@ -8,31 +8,17 @@
 
 <div class="row">
   <div class="col-md-12">
+    <a>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Want To Add Books to
+        Your Wishlist?</button>
+    </a>
     <div class="card">
       <div class="card-header card-header-primary card-header-icon">
         <h4 class="card-title">{{ appname }}</h4>
       </div>
       <div class="card-body">
-        <table class="table" id="product_table">
-          <thead>
-            <tr>
-              <th scope="col">Book Title</th>
-              <th scope="col">Have You Read This?</th>
-            </tr>
-          </thead>
-          {% for wishlists in wishlist %}
-          <tbody>
-            <tr>
-              <td>{{ wishlist.book_name }}</td>
-              <td>{{ wishlist.flag }}</td>
-            </tr>
-          </tbody>
-          {% endfor %}
-        </table>
-        <a>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Want To Add Books to
-            Your Wishlist?</button>
-        </a>
+        <div id="product_table"></div>
+        <p>You have {{ wishlist_count }} books on wishlist!</p>
       </div>
     </div>
   </div>
@@ -61,5 +47,82 @@
 {% endblock content %}
 
 {% block javascripts %}
+<script>
+  async function getProducts() {
+    return fetch("{% url 'wishlist:get_product_json' %}").then((res) => res.json());
+  }
+  async function refreshProducts() {
+    const items = await getProducts();
+    let htmlString = `
+    <table class="table" id="product_table">
+      <thead>
+        <tr>
+          <th scope="col">Book Title</th>
+          <th scope="col">Have You Read This?</th>
+          <th scope="col">Not Interested?</th>
+        </tr>
+      </thead>
+    `;
+    items.forEach((item) => {
+      htmlString += `
+          <tbody>
+            <tr>
+              <td>${item.fields.books}</td>
+              <td>
+                <button type="submit" class="btn btn-success" onclick="markAsRead(${item.pk})">
+                  Mark as Read
+                </button>
+              <td>${item.fields.flag}</td>
+              <td>
+                <button type="submit" class="btn btn-danger" onclick="deleteProduct(${item.pk})">
+                  Remove from Wishlist
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        `;
+    });
+    document.getElementById("product_table").innerHTML = htmlString;
+  }
+  refreshProducts();
+  function deleteProduct(id) {
+    fetch("delete-product-ajax/" + id, {
+      method: "POST"
+    }).then(refreshProducts)
 
+    document.getElementById("form").reset()
+    return false
+  }
+  // Attach a click event listener to the document and delegate it to the "mark-as-read-button" class
+  document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('mark-as-read-button')) {
+      const bookId = event.target.getAttribute('data-book-id');
+      markAsRead(bookId);
+    }
+  });
+
+  async function markAsRead(bookId) {
+    try {
+      const response = await fetch(`/mark-as-read/${bookId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrfToken,  // Include the CSRF token
+        },
+      });
+
+      if (response.ok) {
+        // Book marked as read successfully, you can update the UI if needed
+        console.log('Book marked as read.');
+        refreshProducts(); // Refresh the book list after marking as read
+      } else {
+        // Handle errors, e.g., display an error message
+        console.error('Error marking the book as read.');
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+  }
+
+</script>
 {% endblock javascripts %}
