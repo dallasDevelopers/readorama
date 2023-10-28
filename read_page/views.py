@@ -4,21 +4,25 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.core import serializers
-# from read_page.models import Book
+from wishlist.models import Wishlist 
 
 # Create your views here.
 
 def show_read_page(request):
-    
+    readBooks = Wishlist.objects.filter(flag = True)
+    readBooks_count = readBooks.count()
     context = {
         'appname': 'read_page',
+        'readBooks' : readBooks,
+        'readBooks_count' : readBooks_count
     }
 
     return render(request, 'read_page.html', context)   
 
 def delete_product(request, id):
+    readBooks = Wishlist.objects.filter(flag = True)
     # Get data by ID
-    product = Book.objects.get(pk=id)
+    product = readBooks.objects.get(pk=id)
     # Delete data
     product.delete()
     # Return to the main page
