@@ -6,81 +6,47 @@
 
 {% block content %}
 
-<h3>Read Page</h3>
+<div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary card-header-icon">
+          <h4 class="card-title"></h4>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-left">Read Books</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for readBooks in readBooks %}
+                    <tr>
+                        <td>{{ readBooks.books }}</td>
+                        <td> <!-- url sementara gatau -->
+                            <a href="{% url 'review:add_reviews' %}">
+                                <button type="button" rel="tooltip" class="btn btn-success btn-just-icon btn-sm">
+                                    <i class="material-icons">edit</i>
+                                </button>
+                            </a>
 
-<br />
-
-<table class="table">
-    <thead>
-        <tr>
-            <th class="text-center"></th>
-            <th class="text-center"></th>
-            <th class="text-center"></th>
-            <th class="text-right"></th>
-        </tr>
-    </thead>
-    <tbody> <!-- nanti ganti pake iteration -->
-        <tr>
-            <td class="text-center">1</td>
-            <td class= "text-center"> 
-                <img src="https://upload.wikimedia.org/wikipedia/id/thumb/b/bf/Harry_Potter_and_the_Sorcerer%27s_Stone.jpg/220px-Harry_Potter_and_the_Sorcerer%27s_Stone.jpg" alt="Harry-Potter-Book-Cover" width="100" height="160"> 
-            </td>
-            <td>Harry Potter and the Philosopher's Stone</td>
-            <td class="td-actions text-right">
-                <!-- url sementara gatau -->
-                <a> 
-                    <button type="button" rel="tooltip" class="btn btn-success">
-                        <i class="material-icons">edit</i>
-                    </button>
-                </a>
-
-                <p>Review</p>
-
-                <br />
-
-                <!-- url sementara gatau -->
-                <a>
-                    <button type="button" rel="tooltip" class="btn btn-danger">
-                        <i class="material-icons">close</i>
-                    </button>
-                </a>
-
-                <p>Delete</p>
-
-            </td>
-        </tr>
-        <tr>
-            <td class="text-center">2</td>
-            <td class= "text-center"> 
-                <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1474169725i/15881.jpg" alt="Harry-Potter-Book-Cover2" width="100" height="160"> 
-            </td>
-            <td>Harry Potter and the Chamber of Secrets</td>
-            <td class="td-actions text-right">
-                <!-- url sementara gatau -->
-                <a> 
-                    <button type="button" rel="tooltip" class="btn btn-success">
-                        <i class="material-icons">edit</i>
-                    </button>
-                </a>
-
-                <p>Review</p>
-
-                <br />
-
-                <!-- url sementara gatau -->
-                <a>
-                    <button type="button" rel="tooltip" class="btn btn-danger">
-                        <i class="material-icons">close</i>
-                    </button>
-                </a>
-
-                <p>Delete</p>
-                
-            </td>
-        </tr>
-    </tbody>
-</table>
-
+                            <a href="{% url 'read_page:delete_product' product.pk %}" >
+                                <button type="button" rel="tooltip" class="btn btn-danger btn-just-icon btn-sm"
+                                    onclick="return confirm('Are you sure you want to delete this?');">
+                                    <i class="material-icons">close</i>
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p>You have read {{ readBooks_count }} books!</p>
+        </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}
 
 {% block javascripts %}

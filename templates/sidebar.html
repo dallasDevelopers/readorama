@@ -28,6 +28,12 @@
                     <p> Wishlist </p>
                 </a>
             </li>
+            <li class="nav-item {% if 'index' in segment %} active {% endif %}">
+                <a class="nav-link" href="{% url 'read_page:show_read_page' %}">
+                    <i class="material-icons">add</i>
+                    <p> Read Books </p>
+                </a>
+            </li>
         </ul>
     </div>
 </div>
