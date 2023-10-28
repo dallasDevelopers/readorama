@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main', 'review', 'landing_admin'
+    'read_page',
+    'main', 'review', 'wishlist', 'landing_admin'
+
 ]
 
 MIDDLEWARE = [

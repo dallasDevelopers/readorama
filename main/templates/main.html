@@ -1,25 +1,251 @@
 {% extends "base.html" %}
 
-{% block title %} Datatables {% endblock title %}
+{% block title %} Dashboard {% endblock title %}
 
+<!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header card-header-primary card-header-icon">
-                <h4 class="card-title">{{ appname }}</h4>
+<h3>List Of ReadORama Books</h3>
+<div class="input-group">
+    <input type="text" id="book-search" class="form-control" placeholder="Search for books...">
+</div>
+<br>
+<div class="row" id="book-list">
+    {% for data in datas %}
+    <div class="col-md-4">
+        <div class="card card-product">
+            <div class="card-header card-header-image" data-header-animation="true">
+                <a href="#pablo">
+                    <img class="img" src="/main/static/assets/img/card-1.jpg">
+                </a>
             </div>
             <div class="card-body">
+                <div class="card-actions text-center">
+                    <button type="button" class="btn btn-danger btn-link fix-broken-card">
+                        <i class="material-icons">build</i> Fix Header!
+                    </button>
+                    <button type="button" class="btn btn-default btn-link" rel="tooltip" data-placement="bottom"
+                        title="View">
+                        <i class="material-icons">art_track</i>
+                    </button>
+                    <button type="button" class="btn btn-success btn-link" rel="tooltip" data-placement="bottom"
+                        title="Edit">
+                        <i class="material-icons">edit</i>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-link" rel="tooltip" data-placement="bottom"
+                        title="Remove">
+                        <i class="material-icons">close</i>
+                    </button>
+                </div>
+                <h4 class="card-title">
+                    <a href="#pablo">{{data.name}}</a>
+                </h4>
+                <div class="card-description">
+                    The place is close to Barceloneta Beach and bus stop just 2 min by walk and near to "Naviglio"
+                    where
+                    you can enjoy the main night life in Barcelona.
+                </div>
             </div>
         </div>
     </div>
+    {% endfor %}
 </div>
 
 {% endblock content %}
 
 {% block javascripts %}
+
+<script src="/static/assets/js/plugins/jquery-jvectormap.js"></script>
+<script>
+    $(document).ready(function () {
+        md.initDashboardPageCharts();
+
+        md.initVectorMap();
+
+    });
+</script>
+
+<script src="/static/assets/js/plugins/jquery-jvectormap.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $('#book-search').on('input', function () {
+            var searchTerm = $(this).val();
+            filterBooks(searchTerm);
+        });
+
+        function filterBooks(searchTerm) {
+            $.ajax({
+                url: '/search-books/',
+                method: 'GET',
+                data: { search_term: searchTerm },
+                success: function (data) {
+                    var bookList = $('#book-list');
+                    bookList.empty();
+
+
+                    for (var i = 0; i < data.datas.length; i++) {
+                        console.log(data.datas[i]);
+                        var book = data.datas[i];
+                        var bookHtml = '<div class="col-md-4">' +
+                            '<div class="card card-product">' +
+                            '<div class="card-header card-header-image" data-header-animation="true">' +
+                            '<a href="#pablo">' +
+                            '<img class="img" src="/main/static/assets/img/card-1.jpg">' +
+                            '</a>' +
+                            '</div>' +
+                            '<div class="card-body">' +
+                            '<div class="card-actions text-center">' +
+                            '<button type="button" class="btn btn-danger btn-link fix-broken-card">' +
+                            '<i class="material-icons">build</i> Fix Header!' +
+                            '</button>' +
+                            '<button type="button" class="btn btn-default btn-link" rel="tooltip" data-placement="bottom" title="View">' +
+                            '<i class="material-icons">art_track</i>' +
+                            '</button>' +
+                            '<button type="button" class="btn btn-success btn-link" rel="tooltip" data-placement="bottom" title="Edit">' +
+                            '<i class="material-icons">edit</i>' +
+                            '</button>' +
+                            '<button type="button" class="btn btn-danger btn-link" rel="tooltip" data-placement="bottom" title="Remove">' +
+                            '<i class="material-icons">close</i>' +
+                            '</button>' +
+                            '</div>' +
+                            '<h4 class="card-title">' +
+                            '<a href="#pablo">' + book.name + '</a>' +
+                            '</h4>' +
+                            '<div class="card-description">' +
+                            'Author: ' + book.author + '<br>' +
+                            'Total Review: ' + book.num_reviews + '<br>' +
+                            'Rating: ' + book.rating + '<br>' +
+                            'Genre: ' + book.genre +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
+
+
+                        bookList.append(bookHtml);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("An error occurred: " + error);
+                }
+            });
+        }
+
+        function filterBooks(searchTerm) {
+            $.ajax({
+                url: '/search-books/',
+                method: 'GET',
+                data: { search_term: searchTerm },
+                success: function (data) {
+                    var bookList = $('#book-list');
+                    bookList.empty();
+
+                    if (searchTerm === '') {
+                        // Jika searchTerm kosong, ambil data dari URL yang lama
+                        // Misalnya, URL lama adalah '/old-books/'
+                        $.ajax({
+                            url: '/search-books-blank',
+                            method: 'GET',
+                            success: function (oldData) {
+                                // Render data lama ke dalam bookList
+                                for (var i = 0; i < oldData.datas.length; i++) {
+                                    var oldBook = oldData.datas[i];
+                                    var oldBookHtml = '<div class="col-md-4">' +
+                                        '<div class="card card-product">' +
+                                        '<div class="card-header card-header-image" data-header-animation="true">' +
+                                        '<a href="#pablo">' +
+                                        '<img class="img" src="/main/static/assets/img/card-1.jpg">' +
+                                        '</a>' +
+                                        '</div>' +
+                                        '<div class="card-body">' +
+                                        '<div class="card-actions text-center">' +
+                                        '<button type="button" class="btn btn-danger btn-link fix-broken-card">' +
+                                        '<i class="material-icons">build</i> Fix Header!' +
+                                        '</button>' +
+                                        '<button type="button" class="btn btn-default btn-link" rel="tooltip" data-placement="bottom" title="View">' +
+                                        '<i class="material-icons">art_track</i>' +
+                                        '</button>' +
+                                        '<button type="button" class="btn btn-success btn-link" rel="tooltip" data-placement="bottom" title="Edit">' +
+                                        '<i class="material-icons">edit</i>' +
+                                        '</button>' +
+                                        '<button type="button" class="btn btn-danger btn-link" rel="tooltip" data-placement="bottom" title="Remove">' +
+                                        '<i class="material-icons">close</i>' +
+                                        '</button>' +
+                                        '</div>' +
+                                        '<h4 class="card-title">' +
+                                        '<a href="#pablo">' + oldBook.name + '</a>' +
+                                        '</h4>' +
+                                        '<div class="card-description">' +
+                                        'Author: ' + oldBook.author + '<br>' +
+                                        'Total Review: ' + oldBook.num_reviews + '<br>' +
+                                        'Rating: ' + oldBook.rating + '<br>' +
+                                        'Genre: ' + oldBook.genre +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</div>';
+
+                                    bookList.append(oldBookHtml);
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.log("An error occurred while fetching old data: " + error);
+                            }
+                        });
+                    } else {
+                        // Render data hasil pencarian ke dalam bookList
+                        for (var i = 0; i < data.datas.length; i++) {
+                            var book = data.datas[i];
+                            var bookHtml = '<div class="col-md-4">' +
+                                '<div class="card card-product">' +
+                                '<div class="card-header card-header-image" data-header-animation="true">' +
+                                '<a href="#pablo">' +
+                                '<img class="img" src="/main/static/assets/img/card-1.jpg">' +
+                                '</a>' +
+                                '</div>' +
+                                '<div class="card-body">' +
+                                '<div class="card-actions text-center">' +
+                                '<button type="button" class="btn btn-danger btn-link fix-broken-card">' +
+                                '<i class="material-icons">build</i> Fix Header!' +
+                                '</button>' +
+                                '<button type="button" class="btn btn-default btn-link" rel="tooltip" data-placement="bottom" title="View">' +
+                                '<i class="material-icons">art_track</i>' +
+                                '</button>' +
+                                '<button type="button" class="btn btn-success btn-link" rel="tooltip" data-placement="bottom" title="Edit">' +
+                                '<i class="material-icons">edit</i>' +
+                                '</button>' +
+                                '<button type="button" class="btn btn-danger btn-link" rel="tooltip" data-placement="bottom" title="Remove">' +
+                                '<i class="material-icons">close</i>' +
+                                '</button>' +
+                                '</div>' +
+                                '<h4 class="card-title">' +
+                                '<a href="#pablo">' + book.name + '</a>' +
+                                '</h4>' +
+                                '<div class="card-description">' +
+                                'Author: ' + book.author + '<br>' +
+                                'Total Review: ' + book.num_reviews + '<br>' +
+                                'Rating: ' + book.rating + '<br>' +
+                                'Genre: ' + book.genre +
+                                '</div>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>';
+
+                            bookList.append(bookHtml);
+                        }
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("An error occurred: " + error);
+                }
+            });
+        }
+
+
+    });
+</script>
+
 
 {% endblock javascripts %}
