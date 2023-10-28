@@ -3,7 +3,7 @@ from main.models import Books
 from main.forms import LoginForm, SignUpForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponseNotFound, JsonResponse
 from django.http import HttpResponse
 from django.core import serializers
 from django.urls import reverse
@@ -23,6 +23,7 @@ def show_main(request):
     context = {
         'appname': 'ReadORama',
         'datas': dataAll,
+        'last_login': datetime.datetime.strptime(request.COOKIES['last_login'], '%Y-%m-%d %H:%M:%S.%f'),
     }
 
     return render(request, 'main.html', context)
@@ -78,3 +79,15 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def search_books(request):
+    search_term = request.GET.get('search_term', '')
+    filtered_books = Books.objects.filter(name__icontains=search_term)
+    book_data = [{'name': book.name, 'author': book.author, 'num_reviews': book.num_review, 'rating': book.rating, 'genre': book.genre} for book in filtered_books]
+    return JsonResponse({'datas': book_data})
+
+def search_books_blank(request):
+    search_term = request.GET.get('search_term', '')
+    filtered_books = Books.objects.filter(name__icontains=search_term).order_by('-rating')
+    book_data = [{'name': book.name, 'author': book.author, 'num_reviews': book.num_review, 'rating': book.rating, 'genre': book.genre} for book in filtered_books]
+    return JsonResponse({'datas': book_data})
