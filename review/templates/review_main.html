@@ -13,13 +13,13 @@
                 <h4 class="card-title">{{ appname }}</h4>
             </div>
             <div class="card-body">
-                <table class="table" id="'product_table">
-                    <thead>
+
+                <table class="table" id="review_table">
+                    <!-- <thead>
                         <tr>
                             <th scope="col">Review Title</th>
                             <th scope="col">Book Title</th>
-                            <th scope="col">Review</th>
-                            <th scope="col">Rating</th>
+                            <th scope="col">Your Rating</th>
                             <th scope="col">Date Added</th>
                             <th scope="col"></th>
                             <th scope="col"></th>
@@ -31,7 +31,6 @@
                         <tr>
                             <td>{{ review.review_title }}</td>
                             <td>{{ review.books }}</td>
-                            <td>{{ review.review }}</td>
                             <td>{{ review.rating_new }}</td>
                             <td>{{ review.date_added }}</td>
                             <td>
@@ -40,18 +39,44 @@
                                         Delete
                                     </button>
                                 </a>
+
                             </td>
                             <td>
-                                <a href="{% url 'review:edit_review' review.pk %}">
-                                    <button type="button" class="btn btn-warning">
-                                        Edit
-                                    </button>
-                                </a>
+                            
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#exampleModalLong">
+                                    See Review >
+                                </button>
                             </td>
                         </tr>
-                    </tbody>
-                    {% endfor %}
-                </table>                
+                    </tbody> -->
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">{{review.review_title}}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    {{ review.review }}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <a href="{% url 'review:edit_review' review.pk %}">
+                                        <button type="button" class="btn btn-primary">Edit Review</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- {% endfor %} -->
+                </table>
+
+
                 <!-- Add Review Button -->
                 <a href="{% url 'review:add_reviews' %}">
                     <button type="button" class="btn btn-primary">Add Review</button>
@@ -65,6 +90,64 @@
 
 {% endblock content %}
 
+
+
+
 {% block javascripts %}
+<script>
+    async function get_review() {
+        return fetch("{% url 'review:get_review_json' %}").then((res) => res.json())
+    }
+
+    async function refresh_review() {
+        document.getElementById("review_table").innerHTML = ""
+        const reviews = await get_review()
+        let htmlString = `<tr>
+            <th scope="col">Review Title</th>
+            <th scope="col">Book Title</th>            
+            <th scope="col">Your Rating</th>
+            <th scope="col">Date Added</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+          </tr>`
+
+
+        reviews.forEach((item) => {
+            htmlString += `\n<tr>
+            <td>${item.fields.review_title}</td>
+            <td>${item.fields.books}</td>
+            <td>${item.fields.rating_new}</td>
+            <td>${item.fields.date_added}</td>
+            <td>
+                <button type="button" class="btn btn-danger" onclick="delete_review(${item.pk})">
+                    Delete
+                </button>
+            
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal"
+                data-target="#exampleModalLong">
+                    See Review >
+                </button>
+            </td>
+
+        </tr>`
+        })
+
+        document.getElementById("review_table").innerHTML = htmlString
+    }
+
+    refresh_review()
+
+    function delete_review(id){
+        fetch("/review/delete/" + id, {
+            method : "GET"
+        }).then(refresh_review)
+
+        document.getElementById("form").reset()
+        return False
+    }
+
+</script>
 
 {% endblock javascripts %}

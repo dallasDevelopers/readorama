@@ -18,7 +18,7 @@ class EditForm(ModelForm):
         model = Review
         fields = ['review_title', 'review', 'books', 'rating_new']
         widgets = {
-            'review_title' : forms.TextInput(attrs={'class' : 'form-control', 'name': 'review_title', 'value': ''}),
+            'review_title' : forms.TextInput(attrs={'class' : 'form-control', 'name': 'review_title'}),
             'review' : forms.Textarea(attrs={'class' : 'form-control', 'name': 'review'}), 
             'books' : forms.TextInput(attrs={'class' : 'form-control', 'name' : 'books'}), 
             'rating_new' : forms.NumberInput(attrs={'class' : 'form-control', 'name': 'rating_new'})
