@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'read_page',
-    'main', 'review', 'wishlist'
+    'main', 'review', 'wishlist', 'landing_admin'
+
 ]
 
 MIDDLEWARE = [
