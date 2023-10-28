@@ -23,4 +23,5 @@ urlpatterns = [
     path('', include('main.urls')),
     path('review/', include('review.urls')),
     path('wishlist/', include('wishlist.urls')),
+    path('landing-admin/', include('landing_admin.urls'))
 ]
