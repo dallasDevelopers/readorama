@@ -57,7 +57,6 @@ py manage.py createsuperuser
 <br>
 ```
 py manage.py loaddata bookdatasjson.json
-
 ```
 
 ### Web Flow:
