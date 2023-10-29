@@ -11,10 +11,12 @@ from wishlist.models import Wishlist
 def show_read_page(request):
     readBooks = Wishlist.objects.filter(user=request.user, flag = True)
     readBooks_count = readBooks.count()
+    is_superuser = request.user.is_superuser
     context = {
         'appname': 'read_page',
         'readBooks' : readBooks,
         'readBooks_count' : readBooks_count,
+        'is_superuser' : is_superuser,
     }
 
     return render(request, 'read_page.html', context)   

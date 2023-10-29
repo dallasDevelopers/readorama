@@ -8,19 +8,37 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 
+
+from functools import wraps
+from django.http import HttpResponseForbidden
+
+def superuser_required(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if request.user.is_superuser:
+            return view_func(request, *args, **kwargs)
+        else:
+            return HttpResponseForbidden("Access denied. You must be a superuser to access this page.")
+    return _wrapped_view
+
+
 # Create your views here.
+@superuser_required
 @login_required(login_url='/login')
 def show_main(request):
     books = Books.objects.all()
+    is_superuser = request.user.is_superuser
     context = {
         'books' : books,
         'appname' : 'ReadORama',
+        'is_superuser' : is_superuser,
         'last_login': datetime.datetime.strptime(request.COOKIES['last_login'], '%Y-%m-%d %H:%M:%S.%f'),
     }
 
-    return render(request, 'landingadmin.html', context)
+    return render(request, ['landingadmin.html', 'base.html'], context)
 
 
+@superuser_required
 @login_required(login_url='/login')
 def add_book(request):
     form = BookForm(request.POST or None)
@@ -34,7 +52,7 @@ def add_book(request):
     context = {'form': form}
     return render(request, "add_book.html", context)
 
-
+@superuser_required
 @login_required(login_url='/login')
 @csrf_exempt
 def add_book_ajax(request):
@@ -57,6 +75,7 @@ def add_book_ajax(request):
     return HttpResponseNotFound()
 
 
+@superuser_required
 @login_required(login_url='/login')
 def edit_book(request, id):
     # Get product by ID
@@ -74,11 +93,14 @@ def edit_book(request, id):
     return render(request, "edit_book.html", context)
 
 
+@superuser_required
+@login_required
 def get_product_json(request):
     product_item = Books.objects.all()
     return HttpResponse(serializers.serialize('json', product_item))
 
 
+@superuser_required
 @login_required(login_url='/login')
 @csrf_exempt
 def delete_ajax(request, id):
@@ -87,6 +109,7 @@ def delete_ajax(request, id):
     return HttpResponse(b"DELETED", status=201)
 
 
+@superuser_required
 @login_required(login_url='/login')
 def get_book_by_id(request, id):
     item = Books.objects.filter(pk=id)

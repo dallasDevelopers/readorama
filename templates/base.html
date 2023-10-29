@@ -29,7 +29,11 @@
 <body class="">
   <div class="{% block body_class %}{% endblock body_class %}">
 
-    {% include 'sidebar.html' %}
+    {% if is_superuser %}
+      {% include 'sidebar-admin.html' %}
+    {% else %}
+      {% include 'sidebar.html' %}
+    {% endif %}
 
     <div class="main-panel">
 

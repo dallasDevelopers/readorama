@@ -14,9 +14,11 @@ from django.views.decorators.http import require_POST
 def show_wishlist(request):
     wishlist = Wishlist.objects.filter(user=request.user, flag=False)
     wishlist_count = wishlist.count()
+    is_superuser = request.user.is_superuser
     context = {
         'wishlist' : wishlist,
-        'wishlist_count' : wishlist_count
+        'wishlist_count' : wishlist_count,
+        'is_superuser' : is_superuser,
     }
 
     return render(request, 'wishlist_main.html', context)
