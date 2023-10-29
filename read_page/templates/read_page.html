@@ -39,13 +39,14 @@
                             </tr>
                         </thead>`
         products.forEach((item) => {
+            console.log(item)
             htmlString += `\n
 
             <tbody>
                 <tr>
-                    <td>${item.fields.books}</td>
+                    <td>${item.book_name}</td>
                     <td>
-                        <a href="/review/add/${item.pk}"> 
+                        <a href="/review/add/${item.book_id}"> 
                             <button type="button" rel="tooltip" id="reviewBtn" class="btn btn-success btn-just-icon btn-sm">
                                 <i class="material-icons">edit</i>
                             </button>   
@@ -53,7 +54,7 @@
                     </td>
                     <td>
                         <a>
-                            <button type="button" rel="tooltip" id="deleteBtn" class="btn btn-danger btn-just-icon btn-sm" onclick="deleteProduct(${item.pk})">
+                            <button type="button" rel="tooltip" id="deleteBtn" class="btn btn-danger btn-just-icon btn-sm" onclick="deleteProduct(${item.readBooks_id})">
                                 <i class="material-icons">close</i>
                             </button>
                         </a>

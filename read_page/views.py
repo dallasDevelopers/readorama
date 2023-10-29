@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
 from django.shortcuts import redirect, get_object_or_404
 from django.core import serializers
@@ -56,6 +56,24 @@ def delete_product(request, id):
     data.delete()
     return HttpResponse(b"DELETED", status=201)
 
+@login_required(login_url='/login')
 def get_product_json(request):
-    product_item = Wishlist.objects.filter(user=request.user, flag = True)
-    return HttpResponse(serializers.serialize('json', product_item))
+    readBooks = Wishlist.objects.filter(user=request.user, flag = True)
+    readBooks_count = readBooks.count()
+    combined_data = []
+
+    for item in readBooks:
+        book = item.books
+        combined_data.append({
+            'book_id': book.pk,
+            'book_name': book.name,
+            'book_author': book.author,
+            'book_num_reviews': book.num_review,
+            'book_rating': book.rating,
+            'book_genre': book.genre,
+            'flag': item.flag,
+            'readBooks_id': item.pk,
+            'readBooks_count' : readBooks_count
+        })
+
+    return JsonResponse(combined_data, safe=False)
