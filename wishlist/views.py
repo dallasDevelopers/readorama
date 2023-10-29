@@ -20,7 +20,7 @@ def show_wishlist(request):
         'wishlist' : wishlist,
         'wishlist_count' : wishlist_count,
         'is_superuser' : is_superuser,
-        'last_login': datetime.datetime.strptime(request.COOKIES['last_login'], '%Y-%m-%d %H:%M:%S.%f'),
+        'last_login': datetime.datetime.strptime(request.COOKIES['last_login'], '%Y-%m-%d %H:%M:%S.%f')
     }
 
     return render(request, 'wishlist_main.html', context)
