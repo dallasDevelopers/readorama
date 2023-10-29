@@ -8,6 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+import datetime
 
 # Create your views here.
 @login_required(login_url='/login')
@@ -19,6 +20,7 @@ def show_wishlist(request):
         'wishlist' : wishlist,
         'wishlist_count' : wishlist_count,
         'is_superuser' : is_superuser,
+        'last_login': datetime.datetime.strptime(request.COOKIES['last_login'], '%Y-%m-%d %H:%M:%S.%f'),
     }
 
     return render(request, 'wishlist_main.html', context)
