@@ -14,30 +14,28 @@
             </div>
             <div class="card-body">
                 <div class="add_review_form">
-                    <form method="post">
+                    <form method="post" action="" value="add_reviews">
                         {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="id_name" class="form-label">Review Title</label>
-                            <input type="text" name="review_title" class="form-control" id="id_review">
+                        <div >
+                            <label for="id_review_title" class="form-label">Review Title</label>
+                            <input type="text" name="review_title" class="form-control" id="id_review_title">
                         </div>
-                        <div class="mb-3">
+                        <div>
                             <label for="id_books" class="form-label">Book Title</label>
-                            <input type="text" class="form-control" name="books" id="id_books" value="{{ bookTitle }}">
+                            <input type="text" disabled class="form-control" name="books" id="id_books" value="{{ bookTitle }}">
                         </div>
-                        <div class="mb-3">
+                        <div>
                             <label for="id_review" class="form-label">Review</label>
-                            <textarea class="form-control" name="review" id="id_description" rows="3"></textarea>
+                            <textarea class="form-control" name="review" id="id_review" rows="3"></textarea>
                         </div>
 
-                        <div class="mb-3">
+                        <div>
                             <label for="id_rating" class="form-label">Your Rating</label>
-                            <input type="number" class="form-control" name="rating_new" id="id_amount">
+                            <input type="number" class="form-control" name="rating_new" id="id_rating" min="1" max="5">
                         </div>
-
 
                         <button type="submit" class="btn btn-primary">Add Review</button>
                     </form>
-
 
                 </div>
             </div>

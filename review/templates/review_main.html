@@ -59,47 +59,67 @@
 
 {% block javascripts %}
 <script>
-    async function get_review() {
-        return fetch("{% url 'review:get_review_json' %}").then((res) => res.json())
+    async function get_reviews() {
+    try {
+        const response = await fetch("{% url 'review:get_review_json' %}");
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.error("Failed to fetch data:", response.status);
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        return [];
     }
+}
+
+    // async function get_books(id) {
+    //     return fetch('/review/get-book/'+id).then((res) => res.json());
+
+    // }
 
     async function refresh_review() {
-        document.getElementById("review_table").innerHTML = ""
-        const reviews = await get_review()
+    try {
+        const reviews = await get_reviews();
+        console.log(reviews); // Tambahkan ini
+
         let htmlString = `<tr>
             <th scope="col">Review Title</th>
-            <th scope="col">Book Title</th>            
+            <th scope="col">Book Name</th>            
             <th scope="col">Your Rating</th>
             <th scope="col">Date Added</th>
             <th scope="col"></th>
             <th scope="col"></th>
-          </tr>`
-
+          </tr>`;
 
         reviews.forEach((item) => {
-            htmlString += `\n<tr>
-            <td>${item.fields.review_title}</td>
-            <td>${item.fields.books.name}</td>
-            <td>${item.fields.rating_new}</td>
-            <td>${item.fields.date_added}</td>
-            <td>
-                <button type="button" class="btn btn-danger" onclick="delete_review(${item.pk})">
-                    Delete
-                </button>
-            
-            </td>
-            <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal"
-                data-target="#exampleModalLong">
-                    See Review >
-                </button>
-            </td>
+            htmlString += `<tr>
+                <td>${item.review_title}</td>
+                <td>${item.book_name}</td>
+                <td>${item.rating_new}</td>
+                <td>${item.date_added}</td>
+                <td>
+                    <button type="button" class="btn btn-danger" onclick="delete_review(${item.review_pk})">
+                        Delete
+                    </button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                    data-target="#exampleModalLong">
+                        See Review >
+                    </button>
+                </td>
+            </tr>`;
+        });
 
-        </tr>`
-        })
-
-        document.getElementById("review_table").innerHTML = htmlString
+        // Sisipkan data ke dalam tabel
+        const table = document.getElementById("review_table");
+        table.innerHTML = htmlString;
+    } catch (error) {
+        console.error("Error refreshing reviews:", error);
     }
+}
 
     refresh_review()
 
