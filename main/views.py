@@ -91,7 +91,7 @@ def logout_user(request):
 def search_books(request):
     search_term = request.GET.get('search_term', '')
     filtered_books = Books.objects.filter(name__icontains=search_term)
-    book_data = [{'name': book.name, 'author': book.author, 'num_reviews': book.num_review, 'rating': book.rating, 'genre': book.genre} for book in filtered_books]
+    book_data = [{'name': book.name, 'author': book.author, 'num_reviews': book.num_review, 'rating': book.rating, 'genre': book.genre, 'bookid':book.id} for book in filtered_books]
     return JsonResponse({'datas': book_data})
 
 def search_books_blank(request):
@@ -99,8 +99,6 @@ def search_books_blank(request):
     filtered_books = Books.objects.filter(name__icontains=search_term).order_by('-rating')
     book_data = [{'name': book.name, 'author': book.author, 'num_reviews': book.num_review, 'rating': book.rating, 'genre': book.genre, 'bookid':book.id} for book in filtered_books]
     return JsonResponse({'datas': book_data})
-
-from django.http import JsonResponse
 
 def addToWishlist(request):
     if request.method == 'POST':
