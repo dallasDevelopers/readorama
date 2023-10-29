@@ -5,12 +5,13 @@ from django.contrib import messages
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from main.models import Books
-
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
 # Create your views here.
+@login_required(login_url='/login')
 def show_wishlist(request):
-    wishlist = Wishlist.objects.filter(user=request.user)
+    wishlist = Wishlist.objects.filter(user=request.user, flag=False)
     wishlist_count = wishlist.count()
     context = {
         'wishlist' : wishlist,
@@ -19,6 +20,7 @@ def show_wishlist(request):
 
     return render(request, 'wishlist_main.html', context)
 
+@login_required(login_url='/login')
 def delete_wishlist(request, wishlist_id):
     wishlist = get_object_or_404(Wishlist, id=wishlist_id)
 
@@ -30,55 +32,49 @@ def delete_wishlist(request, wishlist_id):
     context = {'wishlist': wishlist}
     return render(request, "delete_wishlist.html", context)
 
+@login_required(login_url='/login')
 def show_xml(request):
     data = Wishlist.objects.all()
     return HttpResponse(
         serializers.serialize("xml", data), content_type="application/xml"
     )
 
-
+@login_required(login_url='/login')
 def show_json(request):
     data = Wishlist.objects.all()
     return HttpResponse(
         serializers.serialize("json", data), content_type="application/json"
     )
 
-
+@login_required(login_url='/login')
 def show_xml_by_id(request, id):
     data = Wishlist.objects.filter(pk=id)
     return HttpResponse(
         serializers.serialize("xml", data), content_type="application/xml"
     )
 
-
+@login_required(login_url='/login')
 def show_json_by_id(request, id):
     data = Wishlist.objects.filter(pk=id)
     return HttpResponse(
         serializers.serialize("json", data), content_type="application/json"
     )
 
+@login_required(login_url='/login')
 def get_product_json(request):
-    wishlist = Wishlist.objects.filter(user=request.user)
+    wishlist = Wishlist.objects.filter(user=request.user, flag=False)
     return HttpResponse(serializers.serialize("json", wishlist))
 
+@login_required(login_url='/login')
 @csrf_exempt
 def delete_product_ajax(request, id):
     product = Wishlist.objects.get(pk=id)
     product.delete()
     return HttpResponse(b"DELETED", status=201)
 
-@csrf_exempt
+@require_POST
 def mark_as_read(request, book_id):
-    if request.method == 'POST':
-        try:
-            book = Books.objects.get(pk=book_id)
-            book.flag = 'positive'
-            book.save()
-
-            # You can send the book data to another app here
-            # For example, you can use Django's built-in signals to trigger actions in another app
-
-            return JsonResponse({'message': 'Book marked as read successfully.'})
-        except Books.DoesNotExist:
-            return JsonResponse({'message': 'Book not found.'}, status=404)
-    return JsonResponse({'message': 'Invalid request method.'}, status=400)
+    wishlist_item = Wishlist.objects.get(id=book_id)
+    wishlist_item.flag = True
+    wishlist_item.save()
+    return JsonResponse({'message': 'Book marked as read'})
