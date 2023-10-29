@@ -26,6 +26,7 @@ def delete_product(request, id):
     data.delete()
     return HttpResponse(b"DELETED", status=201)
 
+
 def show_xml(request):
     data = Wishlist.objects.filter(user=request.user, flag = True)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
