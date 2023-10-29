@@ -35,7 +35,8 @@
         let htmlString =`<thead>
                             <tr>
                                 <th class="text-left">Read Books</th>
-                            <th></th>
+                                <th>Write a Review</th>
+                                <th>Delete Book</th>
                             </tr>
                         </thead>`
         products.forEach((item) => {
@@ -50,9 +51,10 @@
                                 <i class="material-icons">edit</i>
                             </button>   
                         </a>
+                    </td>
+                    <td>
                         <a>
-                            <button type="button" rel="tooltip" id="deleteBtn" class="btn btn-danger btn-just-icon btn-sm"
-                                onclick="deleteProduct(${item.pk})">
+                            <button type="button" rel="tooltip" id="deleteBtn" class="btn btn-danger btn-just-icon btn-sm" onclick="deleteProduct(${item.pk})">
                                 <i class="material-icons">close</i>
                             </button>
                         </a>
