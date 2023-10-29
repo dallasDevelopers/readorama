@@ -18,7 +18,6 @@
       </div>
       <div class="card-body">
         <div id="product_table"></div>
-        <p>You have {{ wishlist_count }} books on wishlist!</p>
       </div>
     </div>
   </div>
@@ -63,13 +62,21 @@
         </tr>
       </thead>
     `;
+
+    if (items.length === 0) {
+      htmlString += `<p>You have no books on your wishlist</p>`;
+    } else if (items.length === 1) {
+      htmlString += `<p>You have a book on your wishlist</p>`;
+    } else {
+      htmlString += `<p>You have ${items.length} books on your wishlist</p>`;
+    }
+
     items.forEach((item) => {
       console.log(item);
       htmlString += `
           <tbody>
             <tr>
               <td>${item.book_name}</td> <!-- Access the book name from the 'name' field -->
-              <td>${item.flag}</td> <!-- Access the book name from the 'name' field -->
               <td>
                 <button type="submit" class="btn btn-success mark-as-read-button" data-book-id="${item.wishlist_id}">
                   Mark as Read
