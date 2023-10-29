@@ -22,17 +22,21 @@ def show_reviews(request):
 
 
 def add_reviews(request, id):
-    form = ReviewForm(request.POST or None)
     books = Books.objects.filter(pk =id)
-    book_title = books.name 
+    bookData =[]
+    for item in books:
+        bookData.append(item.name)
+    print(bookData[0])
+    book_title = str(bookData[0])
+    form = ReviewForm(request.POST or None)
     if form.is_valid() and request.method == "POST":
         review = form.save(commit=False)
         review.user = request.user
-        review.books = book_title #Review.objects.get(pk=id)
+        review.books = books
         review.save()
         return HttpResponseRedirect(reverse('review:review_main'))
 
-    context = {'form': form}
+    context = {'form': form, 'bookTitle': book_title}
     return render(request, "add_review.html", context)
 
 

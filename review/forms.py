@@ -9,7 +9,7 @@ class ReviewForm(ModelForm):
         widgets = {
             'review_title' : forms.TextInput(attrs={'class' : 'form-control', 'name': 'review_title'}),
             'review' : forms.TextInput(attrs={'class' : 'form-control', 'name': 'review'}), 
-            'books' : forms.NumberInput(attrs={'class' : 'form-control', 'name' : 'books'}), 
+            'books' : forms.TextInput(attrs={'class' : 'form-control', 'name' : 'books', 'value': 'book_title'}), 
             'rating_new' : forms.NumberInput(attrs={'class' : 'form-control', 'name': 'rating_new'})
         }
 

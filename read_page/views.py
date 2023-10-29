@@ -23,7 +23,13 @@ def show_read_page(request):
 
     return render(request, 'read_page.html', context)   
 
-@login_required(login_url='/login')
+@csrf_exempt
+def delete_product(request, id):
+    readBooks = Wishlist.objects.filter(user=request.user, flag = True)
+    data = readBooks.objects.get(pk=id)
+    data.delete()
+    return HttpResponse(b"DELETED", status=201)
+
 def show_xml(request):
     data = Wishlist.objects.filter(user=request.user, flag = True)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
