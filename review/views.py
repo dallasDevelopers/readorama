@@ -21,13 +21,14 @@ def show_reviews(request):
     return render(request, 'review_main.html', context)
 
 
-def add_reviews(request):
+def add_reviews(request, id):
     form = ReviewForm(request.POST or None)
-
+    books = Books.objects.filter(pk =id)
+    book_title = books.name 
     if form.is_valid() and request.method == "POST":
         review = form.save(commit=False)
         review.user = request.user
-        review.books = Books.objects.get(pk=1)
+        review.books = book_title #Review.objects.get(pk=id)
         review.save()
         return HttpResponseRedirect(reverse('review:review_main'))
 
@@ -55,7 +56,7 @@ def edit_review(request, id):
         form.save()
         return HttpResponseRedirect(reverse('review:review_main'))
 
-    context = {'form': form}
+    context = {'form': form, 'ids': id}
     return render(request, "edit_review.html", context)
 
 def get_review_json(request):

@@ -13,42 +13,67 @@
           <h4 class="card-title"></h4>
         </div>
         <div class="card-body">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th class="text-left">Read Books</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for readBooks in readBooks %}
-                    <tr>
-                        <td>{{ readBooks.books }}</td>
-                        <td> <!-- url sementara gatau -->
-                            <a href="{% url 'review:add_reviews' %}">
-                                <button type="button" rel="tooltip" class="btn btn-success btn-just-icon btn-sm">
-                                    <i class="material-icons">edit</i>
-                                </button>
-                            </a>
-
-                            <a href="{% url 'read_page:delete_product' product.pk %}" >
-                                <button type="button" rel="tooltip" class="btn btn-danger btn-just-icon btn-sm"
-                                    onclick="return confirm('Are you sure you want to delete this?');">
-                                    <i class="material-icons">close</i>
-                                </button>
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+            <table id = "product_table" class="table">
             </table>
-            <p>You have read {{ readBooks_count }} books!</p>
+            <p>You have read {{ readBooks_count }} book(s)!</p>
         </div>
     </div>
   </div>
 </div>
+
 {% endblock content %}
 
 {% block javascripts %}
+
+<script>
+    async function getProducts() {
+        return fetch("{% url 'read_page:get_product_json' %}").then((res) => res.json())
+    }
+    async function refreshProducts() {
+        document.getElementById("product_table").innerHTML = ""
+        const products = await getProducts()
+        let htmlString =`<thead>
+                            <tr>
+                                <th class="text-left">Read Books</th>
+                            <th></th>
+                            </tr>
+                        </thead>`
+        products.forEach((item) => {
+            htmlString += `\n
+
+            <tbody>
+                <tr>
+                    <td>${item.fields.books}</td>
+                    <td>
+                        <a href="review/add/${item.pk}"> 
+                            <button type="button" rel="tooltip" id="reviewBtn" class="btn btn-success btn-just-icon btn-sm">
+                                <i class="material-icons">edit</i>
+                            </button>   
+                        </a>
+                        <a>
+                            <button type="button" rel="tooltip" id="deleteBtn" class="btn btn-danger btn-just-icon btn-sm"
+                                onclick="deleteProduct(${item.pk})">
+                                <i class="material-icons">close</i>
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>`
+        })
+        
+        document.getElementById("product_table").innerHTML = htmlString 
+    }
+
+    refreshProducts()
+
+    function deleteProduct(id) {
+        fetch("delete/" + id, {
+            method: "POST"
+        }).then(refreshProducts)
+
+        document.getElementById("form").reset()
+        return false
+    }
+</script>
 
 {% endblock javascripts %}
