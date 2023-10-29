@@ -40,7 +40,7 @@
     <tbody>
         {% for book in books %}
         <tr>
-            <td class="text-center"> </td>
+            <td class="text-center">{{forloop.counter}}</td>
             <td> {{book.name}} </td>
             <td> {{book.author }} </td>
             <td> {{book.rating}} </td>
@@ -201,9 +201,9 @@
             <tbody>
         `
     
-        products.forEach((item) => {
+        products.forEach((item,index) => {
             htmlString += `\n<tr>
-                <td class="text-center"> </td>
+                <td class="text-center">${index+1}</td>
                 <td> ${item.fields.name} </td>
                 <td> ${item.fields.author} </td>
                 <td> ${item.fields.rating}</td>
