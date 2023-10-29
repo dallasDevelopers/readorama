@@ -12,6 +12,7 @@ from django.core import serializers
 import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from landing_admin.views import show_main
 
 # Create your views here.
 
@@ -56,23 +57,30 @@ def register(request):
     return render(request, "register.html", context)
 
 def login_user(request):
-
     form = LoginForm(request.POST or None)
-
     msg = None
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
+
         if user is not None:
             login(request, user)
             response = HttpResponseRedirect(reverse("main:show_main"))
+
+            if user.is_superuser:
+                # Jika pengguna adalah admin (is_superuser == 1), arahkan ke halaman admin
+                response = HttpResponseRedirect(reverse("landing_admin:show_main"))
+
             response.set_cookie('last_login', str(datetime.datetime.now()))
             return response
         else:
             msg = messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+
     context = {"form": form, "msg": msg}
     return render(request, 'login.html', context)
+
 
 def logout_user(request):
     logout(request)

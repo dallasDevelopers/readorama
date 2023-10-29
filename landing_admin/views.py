@@ -1,3 +1,4 @@
+import datetime
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -11,7 +12,8 @@ def show_main(request):
     books = Books.objects.all()
     context = {
         'books' : books,
-        'appname' : 'ReadORama'
+        'appname' : 'ReadORama',
+        'last_login': datetime.datetime.strptime(request.COOKIES['last_login'], '%Y-%m-%d %H:%M:%S.%f'),
     }
 
     return render(request, 'landingadmin.html', context)
