@@ -21,10 +21,12 @@ from wishlist.models import Wishlist
 def show_main(request):
 
     dataAll = Books.objects.all().order_by('-rating')
+    is_superuser = request.user.is_superuser
     
     context = {
         'appname': 'ReadORama',
         'datas': dataAll,
+        'is_superuser' : is_superuser,
         'last_login': datetime.datetime.strptime(request.COOKIES['last_login'], '%Y-%m-%d %H:%M:%S.%f'),
     }
 
