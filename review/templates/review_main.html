@@ -15,41 +15,10 @@
             <div class="card-body">
 
                 <table class="table" id="review_table">
-                    <!-- <thead>
-                        <tr>
-                            <th scope="col">Review Title</th>
-                            <th scope="col">Book Title</th>
-                            <th scope="col">Your Rating</th>
-                            <th scope="col">Date Added</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
+
 
                     {% for review in reviews %}
-                    <tbody>
-                        <tr>
-                            <td>{{ review.review_title }}</td>
-                            <td>{{ review.books }}</td>
-                            <td>{{ review.rating_new }}</td>
-                            <td>{{ review.date_added }}</td>
-                            <td>
-                                <a href="{% url 'review:delete_review' review.pk %}">
-                                    <button type="button" class="btn btn-danger">
-                                        Delete
-                                    </button>
-                                </a>
 
-                            </td>
-                            <td>
-                            
-                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#exampleModalLong">
-                                    See Review >
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody> -->
                     <!-- Modal -->
                     <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -73,14 +42,9 @@
                             </div>
                         </div>
                     </div>
-                    <!-- {% endfor %} -->
+                    {% endfor %}
                 </table>
 
-
-                <!-- Add Review Button -->
-                <a href="{% url 'review:add_reviews' %}">
-                    <button type="button" class="btn btn-primary">Add Review</button>
-                </a>
 
                 <p>You have contributed on {{ review_count }} reviews </p>
             </div>
@@ -115,7 +79,7 @@
         reviews.forEach((item) => {
             htmlString += `\n<tr>
             <td>${item.fields.review_title}</td>
-            <td>${item.fields.books}</td>
+            <td>${item.fields.books.name}</td>
             <td>${item.fields.rating_new}</td>
             <td>${item.fields.date_added}</td>
             <td>
