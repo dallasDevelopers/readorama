@@ -15,7 +15,6 @@
         <div class="card-body">
             <table id = "product_table" class="table">
             </table>
-            <p>You have read {{ readBooks_count }} book(s)!</p>
         </div>
     </div>
   </div>
@@ -59,10 +58,17 @@
                             </button>
                         </a>
                     </td>
-                </tr>
-            </tbody>`
+                </tr>`
         })
         
+        if (products.length === 1) {
+            htmlString += `\n<p>You have read 1 book</p>`;
+        }   
+        else if (products.length > 1) {
+            htmlString += `<p>You have read ${products.length} books</p>`;
+        }
+        htmlString += '</tbody>'
+
         document.getElementById("product_table").innerHTML = htmlString 
     }
 
