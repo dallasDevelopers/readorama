@@ -13,6 +13,7 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from landing_admin.views import show_main
+from wishlist.models import Wishlist
 
 # Create your views here.
 
@@ -70,7 +71,6 @@ def login_user(request):
             response = HttpResponseRedirect(reverse("main:show_main"))
 
             if user.is_superuser:
-                # Jika pengguna adalah admin (is_superuser == 1), arahkan ke halaman admin
                 response = HttpResponseRedirect(reverse("landing_admin:show_main"))
 
             response.set_cookie('last_login', str(datetime.datetime.now()))
@@ -97,5 +97,36 @@ def search_books(request):
 def search_books_blank(request):
     search_term = request.GET.get('search_term', '')
     filtered_books = Books.objects.filter(name__icontains=search_term).order_by('-rating')
-    book_data = [{'name': book.name, 'author': book.author, 'num_reviews': book.num_review, 'rating': book.rating, 'genre': book.genre} for book in filtered_books]
+    book_data = [{'name': book.name, 'author': book.author, 'num_reviews': book.num_review, 'rating': book.rating, 'genre': book.genre, 'bookid':book.id} for book in filtered_books]
     return JsonResponse({'datas': book_data})
+
+from django.http import JsonResponse
+
+def addToWishlist(request):
+    if request.method == 'POST':
+        book_id = request.POST.get('book_id', '')  # Dapatkan ID buku dari permintaan POST
+        user = request.user  # Dapatkan pengguna yang saat ini masuk
+
+        try:
+            # Cari buku dengan ID yang diberikan
+            book = Books.objects.get(pk=book_id)
+
+            # Cek apakah buku ini sudah ada dalam wishlist pengguna
+            wishlist, created = Wishlist.objects.get_or_create(user=user, books=book, flag=False)
+
+            if created:
+                # Buku berhasil ditambahkan ke wishlist
+                response_data = {'message': 'Book added to wishlist successfully'}
+            else:
+                # Buku sudah ada dalam wishlist pengguna
+                response_data = {'message': 'Book is already in your wishlist'}
+
+        except Books.DoesNotExist:
+            # Buku dengan ID yang diberikan tidak ditemukan
+            response_data = {'message': 'Book not found'}
+
+        return JsonResponse(response_data)
+
+    # Handle other HTTP methods (e.g., GET) if needed
+    return JsonResponse({'message': 'Invalid request method'})
+
