@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render
 from review.models import Review 
 from review.forms import ReviewForm, EditForm
@@ -17,6 +18,7 @@ def show_reviews(request):
         'reviews': review,
         'review_count' : review_counts,
         'is_superuser' : is_superuser,
+        'last_login': datetime.datetime.strptime(request.COOKIES['last_login'], '%Y-%m-%d %H:%M:%S.%f'),
     }
 
     return render(request, 'review_main.html', context)
