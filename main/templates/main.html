@@ -25,17 +25,13 @@
                     <button type="button" class="btn btn-danger btn-link fix-broken-card">
                         <i class="material-icons">build</i> Fix Header!
                     </button>
-                    <button type="button" class="btn btn-default btn-link" rel="tooltip" data-placement="bottom"
-                        title="View">
-                        <i class="material-icons">art_track</i>
+                    <button type="button" id="btnwishlist" class="btn btn-success btn-link add-to-wishlist" data-book-id="{{ data.id }}"
+                        rel="tooltip" data-placement="bottom" title="Add to wishlist">
+                        <i class="material-icons">bookmark</i>
                     </button>
-                    <button type="button" class="btn btn-success btn-link" rel="tooltip" data-placement="bottom"
-                        title="Edit">
-                        <i class="material-icons">edit</i>
-                    </button>
-                    <button type="button" class="btn btn-danger btn-link" rel="tooltip" data-placement="bottom"
-                        title="Remove">
-                        <i class="material-icons">close</i>
+                    <button type="button" class="btn btn-primary btn-link" rel="tooltip" data-placement="bottom"
+                        title="I have read this">
+                        <i class="material-icons">check</i>
                     </button>
                 </div>
                 <h4 class="card-title">
@@ -56,6 +52,23 @@
 {% endblock content %}
 
 {% block javascripts %}
+
+<script>
+    // Sisipkan token CSRF dalam permintaan AJAX
+    function getCookie(name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length === 2) return parts.pop().split(";").shift();
+    }
+    
+    var csrftoken = getCookie('csrftoken');
+    
+    // Inisialisasi token CSRF pada setiap permintaan AJAX
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": csrftoken },
+    });
+</script>
+
 
 <script src="/static/assets/js/plugins/jquery-jvectormap.js"></script>
 <script>
@@ -86,8 +99,6 @@
                     bookList.empty();
 
                     if (searchTerm === '') {
-                        // Jika searchTerm kosong, ambil data dari URL yang lama
-                        // Misalnya, URL lama adalah '/old-books/'
                         $.ajax({
                             url: '/search-books-blank',
                             method: 'GET',
@@ -107,14 +118,11 @@
                                         '<button type="button" class="btn btn-danger btn-link fix-broken-card">' +
                                         '<i class="material-icons">build</i> Fix Header!' +
                                         '</button>' +
-                                        '<button type="button" class="btn btn-default btn-link" rel="tooltip" data-placement="bottom" title="View">' +
-                                        '<i class="material-icons">art_track</i>' +
+                                        '<button type="button" id="btnwishlist" class="btn btn-success btn-link add-to-wishlist" data-book-id="' + oldBook.bookid + '" rel="tooltip" data-placement="bottom" title="Add to wishlist">' +
+                                        '<i class="material-icons">bookmark</i>' +
                                         '</button>' +
-                                        '<button type="button" class="btn btn-success btn-link" rel="tooltip" data-placement="bottom" title="Edit">' +
-                                        '<i class="material-icons">edit</i>' +
-                                        '</button>' +
-                                        '<button type="button" class="btn btn-danger btn-link" rel="tooltip" data-placement="bottom" title="Remove">' +
-                                        '<i class="material-icons">close</i>' +
+                                        '<button type="button" class="btn btn-primary btn-link" rel="tooltip" data-placement="bottom" title="I have read this">' +
+                                        '<i class="material-icons">check</i>' +
                                         '</button>' +
                                         '</div>' +
                                         '<h4 class="card-title">' +
@@ -138,7 +146,6 @@
                             }
                         });
                     } else {
-                        // Render data hasil pencarian ke dalam bookList
                         for (var i = 0; i < data.datas.length; i++) {
                             var book = data.datas[i];
                             var bookHtml = '<div class="col-md-4">' +
@@ -153,14 +160,11 @@
                                 '<button type="button" class="btn btn-danger btn-link fix-broken-card">' +
                                 '<i class="material-icons">build</i> Fix Header!' +
                                 '</button>' +
-                                '<button type="button" class="btn btn-default btn-link" rel="tooltip" data-placement="bottom" title="View">' +
-                                '<i class="material-icons">art_track</i>' +
+                                '<button type="button" id="btnwishlist" class="btn btn-success btn-link add-to-wishlist" data-book-id="' + book.bookid + '" rel="tooltip" data-placement="bottom" title="Add to wishlist">' +
+                                '<i class="material-icons">bookmark</i>' +
                                 '</button>' +
-                                '<button type="button" class="btn btn-success btn-link" rel="tooltip" data-placement="bottom" title="Edit">' +
-                                '<i class="material-icons">edit</i>' +
-                                '</button>' +
-                                '<button type="button" class="btn btn-danger btn-link" rel="tooltip" data-placement="bottom" title="Remove">' +
-                                '<i class="material-icons">close</i>' +
+                                '<button type="button" class="btn btn-primary btn-link" rel="tooltip" data-placement="bottom" title="I have read this">' +
+                                '<i class="material-icons">check</i>' +
                                 '</button>' +
                                 '</div>' +
                                 '<h4 class="card-title">' +
@@ -185,6 +189,35 @@
                 }
             });
         }
+
+        $(document).on('click', '#btnwishlist', function () {
+    var bookId = $(this).data('book-id');
+
+    // Kirim data buku ke server melalui permintaan AJAX
+    $.ajax({
+        url: '/add-to-wishlist/',
+        method: 'POST',
+        data: {
+            book_id: bookId
+        },
+        success: function (response) {
+            
+            var message = response.message;
+            Swal.fire({
+                title: message === 'Book added to wishlist successfully' ? 'Success!' : 'Error!',
+                text: message,
+                icon: message === 'Book added to wishlist successfully' ? 'success' : 'error',
+            });
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'An error occurred: ' + error,
+                icon: 'error',
+            });
+        }
+    });
+});
 
 
     });
