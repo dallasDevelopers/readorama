@@ -32,9 +32,58 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="text-align: center;">
+        <span class="material-icons">
+          bookmark_border
+        </span>
         <p>To add a book, simply go to the main page and hover over a book you want to add, then click on the
           button to add them to your wishlist! It's that simple.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="succModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Success</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <span class="material-icons">
+          done
+        </span>
+        <p>You have read a book!</p>
+        <p>If you want to review the book, go to your read page and click on the review button!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="remModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Removed</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <span class="material-icons">
+          close
+        </span>
+        <p>You have removed a book from your wishlist :(</p>
+        <p></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -63,14 +112,6 @@
       </thead>
     `;
 
-    if (items.length === 0) {
-      htmlString += `<p>You have no books on your wishlist</p>`;
-    } else if (items.length === 1) {
-      htmlString += `<p>You have a book on your wishlist</p>`;
-    } else {
-      htmlString += `<p>You have ${items.length} books on your wishlist</p>`;
-    }
-
     items.forEach((item) => {
       console.log(item);
       htmlString += `
@@ -78,12 +119,12 @@
             <tr>
               <td>${item.book_name}</td> <!-- Access the book name from the 'name' field -->
               <td>
-                <button type="submit" class="btn btn-success mark-as-read-button" data-book-id="${item.wishlist_id}">
+                <button type="submit" class="btn btn-success mark-as-read-button" data-book-id="${item.wishlist_id}" data-toggle="modal" data-target="#succModal">
                   Mark as Read
                 </button>
               </td>
               <td>
-                <button type="submit" class="btn btn-danger" onclick="deleteProduct(${item.wishlist_id})">
+                <button type="submit" class="btn btn-danger" onclick="deleteProduct(${item.wishlist_id})" data-toggle="modal" data-target="#remModal">
                   Remove from Wishlist
                 </button>
               </td>
@@ -92,6 +133,13 @@
         `;
     });
     htmlString += '</table>';
+    if (items.length === 0) {
+      htmlString += `<p>You have no books on your wishlist</p>`;
+    } else if (items.length === 1) {
+      htmlString += `<p>You have a book on your wishlist</p>`;
+    } else {
+      htmlString += `<p>You have ${items.length} books on your wishlist</p>`;
+    }
     document.getElementById("product_table").innerHTML = htmlString;
   }
 
