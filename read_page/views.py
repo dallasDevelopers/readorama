@@ -6,6 +6,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.core import serializers
 from wishlist.models import Wishlist 
 from django.contrib.auth.decorators import login_required
+import datetime
 
 # Create your views here.
 
@@ -19,6 +20,7 @@ def show_read_page(request):
         'readBooks' : readBooks,
         'readBooks_count' : readBooks_count,
         'is_superuser' : is_superuser,
+        'last_login': datetime.datetime.strptime(request.COOKIES['last_login'], '%Y-%m-%d %H:%M:%S.%f'),
     }
 
     return render(request, 'read_page.html', context)   

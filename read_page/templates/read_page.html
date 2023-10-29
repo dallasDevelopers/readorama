@@ -8,17 +8,43 @@
 
 <div class="row">
     <div class="col-md-12">
+        <a>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Want To Add Books to
+              Your Read Books?</button>
+        </a>
       <div class="card">
         <div class="card-header card-header-primary card-header-icon">
           <h4 class="card-title"></h4>
         </div>
         <div class="card-body">
-            <table id = "product_table" class="table">
-            </table>
+            <div id="product_table"></div>
         </div>
     </div>
   </div>
 </div>
+
+<div class="modal" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Read Books</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="text-align: center;">
+          <span class="material-icons">
+            done
+          </span>
+          <p>To add a book, simply go to the main page and hover over a book you want to add, then click on the
+            button to add them to your read books! It's that simple.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 {% endblock content %}
 
@@ -31,13 +57,14 @@
     async function refreshProducts() {
         document.getElementById("product_table").innerHTML = ""
         const products = await getProducts()
-        let htmlString =`<thead>
-                            <tr>
-                                <th class="text-left">Read Books</th>
-                                <th>Write a Review</th>
-                                <th>Delete Book</th>
-                            </tr>
-                        </thead>`
+        let htmlString =`<table id = "product_table" class="table">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Read Books</th>
+                                    <th>Write a Review</th>
+                                    <th>Delete Book</th>
+                                </tr>
+                            </thead>`
         products.forEach((item) => {
             console.log(item)
             htmlString += `\n
@@ -59,16 +86,20 @@
                             </button>
                         </a>
                     </td>
-                </tr>`
+                </tr>
+            </tbody>`
         })
         
-        if (products.length === 1) {
-            htmlString += `\n<p>You have read 1 book</p>`;
+        htmlString += '</table>'
+        if (products.length === 0) {
+            htmlString += `<p>You haven't read any book</p>`;
+        }
+        else if (products.length === 1) {
+            htmlString += `<p>You have read 1 book</p>`;
         }   
         else if (products.length > 1) {
             htmlString += `<p>You have read ${products.length} books</p>`;
         }
-        htmlString += '</tbody>'
 
         document.getElementById("product_table").innerHTML = htmlString 
     }
