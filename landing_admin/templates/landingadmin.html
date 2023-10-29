@@ -142,15 +142,20 @@
                                   <div class="input-group-prepend">
                                     <div class="input-group-text"><i class="material-icons">category</i></div>
                                   </div>
-                                  <input type="text" placeholder="Genre" class="form-control" name="genre" id="genre">
+                                  <select id="genre" name="genre">
+                                    <option value="Fiction">Fiction</option>
+                                    <option value="Non Fiction">Non Fiction</option>
+                                  </select>
                                 </div>
                             </div>
 
                         </div>
 
-                            <button class="btn btn-round mb-3 mt-2 d-flex justify-content-center" type="submit" id="button_add" data-dismiss="modal">
+                        <div class="form-group bmd-form-group d-flex justify-content-center">
+                            <button class="btn btn-round mb-3 mt-2" type="submit" id="button_add" data-dismiss="modal">
                                 Add book
                             </button>
+                        </div>
                     </form>
                 </div>
                 

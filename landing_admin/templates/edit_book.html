@@ -45,11 +45,17 @@
     </div>
 
     <div class="form-row">
-        <div class="form-group col-md-6 py-4">
-            <label for="genre"><i class="material-icons">category</i>Genre</label>
-            <input type="text" class="form-control" name="genre" id="genre" value="{{form.instance.genre}}">
+        <div class="form-group col-md-6 mb-5">
+            <label for="genre" class="col-sm-2 col-form-label"><i class="material-icons">category</i>Genre</label>
+            <div class="col-sm-10">
+                <select class="form-control" id="genre" name="genre">
+                    <option value="Fiction" {% if form.instance.genre == 'Fiction' %}selected{% endif %}>Fiction</option>
+                    <option value="Non Fiction" {% if form.instance.genre == 'Non Fiction' %}selected{% endif %}>Non Fiction</option>
+                </select>
+            </div>
         </div>
     </div>
+    
     
     <button value="book" type="submit" class="btn btn-primary"><i class="material-icons">edit</i> Edit</button>
 </form>
