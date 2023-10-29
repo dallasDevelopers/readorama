@@ -48,13 +48,15 @@ Navbar:
 
 ### Flow to run program:
 1. migrate all migrations
+
 2. create superuser to login as admin, by running this command:
-<br>
+
 ```
 py manage.py createsuperuser
 ```
+
 3. load data fixture by running this command:
-<br>
+
 ```
 py manage.py loaddata bookdatasjson.json
 ```
