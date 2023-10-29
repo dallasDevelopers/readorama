@@ -110,8 +110,6 @@ def addToWishlist(request):
         try:
             
             book = Books.objects.get(pk=book_id)
-
-            
             wishlist, created = Wishlist.objects.get_or_create(user=user, books=book, flag=False)
 
             if created:
@@ -126,3 +124,50 @@ def addToWishlist(request):
 
     return JsonResponse({'message': 'Invalid request method'})
 
+def bookReaded(request):
+    if request.method == 'POST':
+        book_id = request.POST.get('book_id', '')
+        user = request.user
+        try:
+            
+            book = Books.objects.get(pk=book_id)
+            wishlist, created = Wishlist.objects.get_or_create(user=user, books=book, flag=True)
+
+            if created:
+                response_data = {'message': 'Book marked as read successfully'}
+            else:
+                response_data = {'message': 'Book already marked as read'}
+
+        except Books.DoesNotExist:
+            response_data = {'message': 'Book not found'}
+
+        return JsonResponse(response_data)
+
+    return JsonResponse({'message': 'Invalid request method'})
+
+
+def filter_books_by_category(request):
+    category = request.GET.get('category', 'all')
+
+    if category == 'all':
+        books = Books.objects.all().order_by('-rating')
+    elif category == 'Fiction':
+        books = Books.objects.exclude(genre__icontains='Non').order_by('-rating')
+    elif category == 'Non Fiction':
+        books = Books.objects.filter(genre__icontains='Non').order_by('-rating')
+    else:
+        return JsonResponse({'error': 'Invalid category'})
+
+    book_data = []
+
+    for book in books:
+        book_data.append({
+            'bookid': book.pk,
+            'name': book.name,
+            'author': book.author,
+            'num_reviews': book.num_review,
+            'rating': book.rating,
+            'genre': book.genre,
+        })
+
+    return JsonResponse({'datas': book_data})

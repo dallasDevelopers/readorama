@@ -10,13 +10,24 @@
 <div class="input-group">
     <input type="text" id="book-search" class="form-control" placeholder="Search for books...">
 </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group" id="category-filter">
+                <button type="button" class="btn btn-primary" data-category="all">All</button>
+                <button type="button" class="btn btn-primary" data-category="fiction">Fiction</button>
+                <button type="button" class="btn btn-primary" data-category="nonfiction">Non-Fiction</button>
+            </div>
+        </div>
+    </div>
+</div>
 <br>
 <div class="row" id="book-list">
     {% for data in datas %}
     <div class="col-xs-12 col-sm-6 col-md-4">
         <div class="card card-product">
             <div class="card-header card-header-image" data-header-animation="true">
-                <a href="#pablo">
+                <a href="#">
                     <img class="img" src="/main/static/assets/img/card-1.jpg">
                 </a>
             </div>
@@ -25,17 +36,17 @@
                     <button type="button" class="btn btn-danger btn-link fix-broken-card">
                         <i class="material-icons">build</i> Fix Header!
                     </button>
-                    <button type="button" id="btnwishlist" class="btn btn-success btn-link add-to-wishlist" data-book-id="{{ data.id }}"
-                        rel="tooltip" data-placement="bottom" title="Add to wishlist">
+                    <button type="button" id="btnwishlist" class="btn btn-success btn-link add-to-wishlist"
+                        data-book-id="{{ data.id }}" rel="tooltip" data-placement="bottom" title="Add to wishlist">
                         <i class="material-icons">bookmark</i>
                     </button>
-                    <button type="button" class="btn btn-primary btn-link" rel="tooltip" data-placement="bottom"
-                        title="I have read this">
+                    <button type="button" id="btnread" class="btn btn-primary btn-link" rel="tooltip"
+                        data-placement="bottom" title="I have read this" data-book-id="{{ data.id }}">
                         <i class="material-icons">check</i>
                     </button>
                 </div>
                 <h4 class="card-title">
-                    <a href="#pablo">{{data.name}}</a>
+                    <a href="#">{{data.name}}</a>
                 </h4>
                 <div class="card-description">
                     Author: {{data.author}} <br>
@@ -60,9 +71,9 @@
         var parts = value.split("; " + name + "=");
         if (parts.length === 2) return parts.pop().split(";").shift();
     }
-    
+
     var csrftoken = getCookie('csrftoken');
-    
+
     // Inisialisasi token CSRF pada setiap permintaan AJAX
     $.ajaxSetup({
         headers: { "X-CSRFToken": csrftoken },
@@ -109,7 +120,7 @@
                                     var oldBookHtml = '<div class="col-md-4">' +
                                         '<div class="card card-product">' +
                                         '<div class="card-header card-header-image" data-header-animation="true">' +
-                                        '<a href="#pablo">' +
+                                        '<a href="#">' +
                                         '<img class="img" src="/main/static/assets/img/card-1.jpg">' +
                                         '</a>' +
                                         '</div>' +
@@ -121,12 +132,12 @@
                                         '<button type="button" id="btnwishlist" class="btn btn-success btn-link add-to-wishlist" data-book-id="' + oldBook.bookid + '" rel="tooltip" data-placement="bottom" title="Add to wishlist">' +
                                         '<i class="material-icons">bookmark</i>' +
                                         '</button>' +
-                                        '<button type="button" class="btn btn-primary btn-link" rel="tooltip" data-placement="bottom" title="I have read this">' +
+                                        '<button type="button" id="btnread" class="btn btn-primary btn-link" data-book-id="' + oldBook.bookid + '"  rel="tooltip" data-placement="bottom" title="I have read this">' +
                                         '<i class="material-icons">check</i>' +
                                         '</button>' +
                                         '</div>' +
                                         '<h4 class="card-title">' +
-                                        '<a href="#pablo">' + oldBook.name + '</a>' +
+                                        '<a href="#">' + oldBook.name + '</a>' +
                                         '</h4>' +
                                         '<div class="card-description">' +
                                         'Author: ' + oldBook.author + '<br>' +
@@ -151,7 +162,7 @@
                             var bookHtml = '<div class="col-md-4">' +
                                 '<div class="card card-product">' +
                                 '<div class="card-header card-header-image" data-header-animation="true">' +
-                                '<a href="#pablo">' +
+                                '<a href="#">' +
                                 '<img class="img" src="/main/static/assets/img/card-1.jpg">' +
                                 '</a>' +
                                 '</div>' +
@@ -163,12 +174,12 @@
                                 '<button type="button" id="btnwishlist" class="btn btn-success btn-link add-to-wishlist" data-book-id="' + book.bookid + '" rel="tooltip" data-placement="bottom" title="Add to wishlist">' +
                                 '<i class="material-icons">bookmark</i>' +
                                 '</button>' +
-                                '<button type="button" class="btn btn-primary btn-link" rel="tooltip" data-placement="bottom" title="I have read this">' +
+                                '<button type="button" id="btnread" class="btn btn-primary btn-link" data-book-id="' + book.bookid + '" rel="tooltip" data-placement="bottom" title="I have read this">' +
                                 '<i class="material-icons">check</i>' +
                                 '</button>' +
                                 '</div>' +
                                 '<h4 class="card-title">' +
-                                '<a href="#pablo">' + book.name + '</a>' +
+                                '<a href="#">' + book.name + '</a>' +
                                 '</h4>' +
                                 '<div class="card-description">' +
                                 'Author: ' + book.author + '<br>' +
@@ -191,37 +202,146 @@
         }
 
         $(document).on('click', '#btnwishlist', function () {
-    var bookId = $(this).data('book-id');
+            var bookId = $(this).data('book-id');
 
-    // Kirim data buku ke server melalui permintaan AJAX
-    $.ajax({
-        url: '/add-to-wishlist/',
-        method: 'POST',
-        data: {
-            book_id: bookId
-        },
-        success: function (response) {
+            $.ajax({
+                url: '/add-to-wishlist/',
+                method: 'POST',
+                data: {
+                    book_id: bookId
+                },
+                success: function (response) {
 
-            var message = response.message;
-            Swal.fire({
-                title: message === 'Book added to wishlist successfully' ? 'Success!' : 'Error!',
-                text: message,
-                icon: message === 'Book added to wishlist successfully' ? 'success' : 'error',
+                    var message = response.message;
+                    Swal.fire({
+                        title: message === 'Book added to wishlist successfully' ? 'Success!' : 'Error!',
+                        text: message,
+                        icon: message === 'Book added to wishlist successfully' ? 'success' : 'error',
+                    });
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'An error occurred: ' + error,
+                        icon: 'error',
+                    });
+                }
             });
-        },
-        error: function (xhr, status, error) {
-            Swal.fire({
-                title: 'Error!',
-                text: 'An error occurred: ' + error,
-                icon: 'error',
+        });
+
+        $(document).on('click', '#btnread', function () {
+            var bookId = $(this).data('book-id');
+
+            $.ajax({
+                url: '/add-to-read/',
+                method: 'POST',
+                data: {
+                    book_id: bookId
+                },
+                success: function (response) {
+
+                    var message = response.message;
+                    Swal.fire({
+                        title: message === 'Book marked as read successfully' ? 'Success!' : 'Error!',
+                        text: message,
+                        icon: message === 'Book marked as read successfully' ? 'success' : 'error',
+                    });
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'An error occurred: ' + error,
+                        icon: 'error',
+                    });
+                }
             });
-        }
-    });
-});
+        });
 
 
     });
 </script>
+
+<script>
+    // Sisipkan token CSRF dalam permintaan AJAX
+    function getCookie(name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length === 2) return parts.pop().split(";").shift();
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": csrftoken },
+    });
+
+    $(document).ready(function () {
+        $('#category-filter button[data-category="all"]').on('click', function () {
+            filterBooksByCategory('all');
+        });
+
+        $('#category-filter button[data-category="fiction"]').on('click', function () {
+            filterBooksByCategory('Fiction');
+        });
+
+        $('#category-filter button[data-category="nonfiction"]').on('click', function () {
+            filterBooksByCategory('Non Fiction');
+        });
+
+        function filterBooksByCategory(category) {
+            $.ajax({
+                url: '/filter-books-by-category/',
+                method: 'GET',
+                data: { category: category },
+                success: function (data) {
+                    var bookList = $('#book-list');
+                    bookList.empty();
+
+                    for (var i = 0; i < data.datas.length; i++) {
+                        var book = data.datas[i];
+                        var bookHtml = '<div class="col-md-4">' +
+                            '<div class="card card-product">' +
+                            '<div class="card-header card-header-image" data-header-animation="true">' +
+                            '<a href="#">' +
+                            '<img class="img" src="/main/static/assets/img/card-1.jpg">' +
+                            '</a>' +
+                            '</div>' +
+                            '<div class="card-body">' +
+                            '<div class="card-actions text-center">' +
+                            '<button type="button" class="btn btn-danger btn-link fix-broken-card">' +
+                            '<i class="material-icons">build</i> Fix Header!' +
+                            '</button>' +
+                            '<button type="button" id="btnwishlist" class="btn btn-success btn-link add-to-wishlist" data-book-id="' + book.bookid + '" rel="tooltip" data-placement="bottom" title="Add to wishlist">' +
+                            '<i class="material-icons">bookmark</i>' +
+                            '</button>' +
+                            '<button type="button" id="btnread" class="btn btn-primary btn-link" data-book-id="' + book.bookid + '" rel="tooltip" data-placement="bottom" title="I have read this">' +
+                            '<i class="material-icons">check</i>' +
+                            '</button>' +
+                            '</div>' +
+                            '<h4 class="card-title">' +
+                            '<a href="#">' + book.name + '</a>' +
+                            '</h4>' +
+                            '<div class="card-description">' +
+                            'Author: ' + book.author + '<br>' +
+                            'Total Review: ' + book.num_reviews + '<br>' +
+                            'Rating: ' + book.rating + '<br>' +
+                            'Genre: ' + book.genre +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
+
+                        bookList.append(bookHtml);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("An error occurred: " + error);
+                }
+            });
+        }
+    });
+</script>
+
 
 
 {% endblock javascripts %}
