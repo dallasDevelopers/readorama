@@ -104,29 +104,25 @@ from django.http import JsonResponse
 
 def addToWishlist(request):
     if request.method == 'POST':
-        book_id = request.POST.get('book_id', '')  # Dapatkan ID buku dari permintaan POST
-        user = request.user  # Dapatkan pengguna yang saat ini masuk
+        book_id = request.POST.get('book_id', '')
+        user = request.user
 
         try:
-            # Cari buku dengan ID yang diberikan
+            
             book = Books.objects.get(pk=book_id)
 
-            # Cek apakah buku ini sudah ada dalam wishlist pengguna
+            
             wishlist, created = Wishlist.objects.get_or_create(user=user, books=book, flag=False)
 
             if created:
-                # Buku berhasil ditambahkan ke wishlist
                 response_data = {'message': 'Book added to wishlist successfully'}
             else:
-                # Buku sudah ada dalam wishlist pengguna
                 response_data = {'message': 'Book is already in your wishlist'}
 
         except Books.DoesNotExist:
-            # Buku dengan ID yang diberikan tidak ditemukan
             response_data = {'message': 'Book not found'}
 
         return JsonResponse(response_data)
 
-    # Handle other HTTP methods (e.g., GET) if needed
     return JsonResponse({'message': 'Invalid request method'})
 
