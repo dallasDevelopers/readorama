@@ -1,3 +1,4 @@
+from itertools import chain
 from django.shortcuts import render
 from wishlist.models import Wishlist 
 from django.shortcuts import get_object_or_404, redirect
@@ -7,6 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from main.models import Books
 
 # Create your views here.
 @login_required(login_url='/login')
@@ -63,7 +65,25 @@ def show_json_by_id(request, id):
 @login_required(login_url='/login')
 def get_product_json(request):
     wishlist = Wishlist.objects.filter(user=request.user, flag=False)
-    return HttpResponse(serializers.serialize("json", wishlist))
+
+    combined_data = []
+
+    for item in wishlist:
+        book = item.books
+        combined_data.append({
+            'book_id': book.pk,
+            'book_name': book.name,
+            'book_author': book.author,
+            'book_num_reviews': book.num_review,
+            'book_rating': book.rating,
+            'book_genre': book.genre,
+            'flag': item.flag,
+            'wishlist_id': item.pk,
+        })
+
+    return JsonResponse(combined_data, safe=False)
+
+
 
 @login_required(login_url='/login')
 @csrf_exempt

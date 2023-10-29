@@ -64,18 +64,19 @@
       </thead>
     `;
     items.forEach((item) => {
+      console.log(item);
       htmlString += `
           <tbody>
             <tr>
-              <td>${item.fields.books}</td> <!-- Access the book name from the 'name' field -->
-              <td>${item.fields.flag}</td> <!-- Access the book name from the 'name' field -->
+              <td>${item.book_name}</td> <!-- Access the book name from the 'name' field -->
+              <td>${item.flag}</td> <!-- Access the book name from the 'name' field -->
               <td>
-                <button type="submit" class="btn btn-success mark-as-read-button" data-book-id="${item.pk}">
+                <button type="submit" class="btn btn-success mark-as-read-button" data-book-id="${item.wishlist_id}">
                   Mark as Read
                 </button>
               </td>
               <td>
-                <button type="submit" class="btn btn-danger" onclick="deleteProduct(${item.pk})">
+                <button type="submit" class="btn btn-danger" onclick="deleteProduct(${item.wishlist_id})">
                   Remove from Wishlist
                 </button>
               </td>
