@@ -43,4 +43,26 @@ Navbar:
 
 
 ## Source of the book catalog dataset:
-[Google Books API](https://developers.google.com/books/)
+[Kaggle](https://www.kaggle.com/datasets/sootersaalu/amazon-top-50-bestselling-books-2009-2019)
+
+
+### Flow to run program:
+1. migrate all migrations
+
+2. create superuser to login as admin, by running this command:
+
+```
+py manage.py createsuperuser
+```
+
+3. load data fixture by running this command:
+
+```
+py manage.py loaddata bookdatasjson.json
+```
+
+### Web Flow:
+1. add book to wishlist/mark the book as read
+2. open wishlist(if the book added to wishlist) you can remove from wishlist or mark it as read
+3. open read books menu to give review
+4. "Your Review" menu is to show all the books that have been reviewed
