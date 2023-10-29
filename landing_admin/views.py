@@ -6,8 +6,10 @@ from main.models import Books
 from landing_admin.forms import BookForm
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='/login')
 def show_main(request):
     books = Books.objects.all()
     context = {
@@ -18,6 +20,8 @@ def show_main(request):
 
     return render(request, 'landingadmin.html', context)
 
+
+@login_required(login_url='/login')
 def add_book(request):
     form = BookForm(request.POST or None)
 
@@ -31,6 +35,7 @@ def add_book(request):
     return render(request, "add_book.html", context)
 
 
+@login_required(login_url='/login')
 @csrf_exempt
 def add_book_ajax(request):
     if request.method == 'POST':
@@ -52,7 +57,7 @@ def add_book_ajax(request):
     return HttpResponseNotFound()
 
 
-
+@login_required(login_url='/login')
 def edit_book(request, id):
     # Get product by ID
     book = Books.objects.get(pk = id)
@@ -74,12 +79,15 @@ def get_product_json(request):
     return HttpResponse(serializers.serialize('json', product_item))
 
 
+@login_required(login_url='/login')
 @csrf_exempt
 def delete_ajax(request, id):
     item = Books.objects.get(pk=id)
     item.delete()
     return HttpResponse(b"DELETED", status=201)
 
+
+@login_required(login_url='/login')
 def get_book_by_id(request, id):
     item = Books.objects.filter(pk=id)
     return HttpResponse(serializers.serialize('json', item))
