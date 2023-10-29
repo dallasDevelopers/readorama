@@ -1,0 +1,35 @@
+<div class="sidebar" data-color="rose" data-background-color="black" data-image="/main/static/assets/img/sidebar-1.jpg">
+
+    <div class="logo">
+        <a rel="noopener noreferrer" href="{% url 'landing_admin:show_main' %}" class="simple-text logo-mini">
+            RO
+        </a>
+        <a rel="noopener noreferrer" href="{% url 'landing_admin:show_main' %}" class="simple-text logo-normal">
+            ReadORama
+        </a>
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="user">
+            <div class="user-info">
+                <a data-toggle="collapse" href="#collapseExample" class="username">
+                    <span>
+                        {{ request.user.username }}
+                        <b class="caret"></b>
+                    </span>
+                </a>
+                <div class="collapse" id="collapseExample">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'main:logout' %}">
+                                <span class="sidebar-mini"> LO </span>
+                                <span class="sidebar-normal"> Logout </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <ul class="nav">
+        </ul>
+    </div>
+</div>
