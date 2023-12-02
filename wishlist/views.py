@@ -102,3 +102,22 @@ def mark_as_read(request, book_id):
     wishlist_item.flag = True
     wishlist_item.save()
     return JsonResponse({'message': 'Book marked as read'})
+
+def wishlistmodels(request):
+    data = Wishlist.objects.all()
+    combined_data = []
+
+    for item in data:
+        book = item.books
+        combined_data.append({
+            'book_id': book.pk,
+            'book_name': book.name,
+            'book_author': book.author,
+            'book_num_reviews': book.num_review,
+            'book_rating': book.rating,
+            'book_genre': book.genre,
+            'flag': item.flag,
+            'wishlist_id': item.pk,
+        })
+
+    return JsonResponse(combined_data, safe=False)
