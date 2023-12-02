@@ -1,5 +1,5 @@
 from django.urls import path
-from wishlist.views import show_wishlist, delete_wishlist, show_xml, show_json, show_xml_by_id, show_json_by_id, get_product_json, delete_product_ajax, mark_as_read
+from wishlist.views import show_wishlist, delete_wishlist, show_xml, show_json, show_xml_by_id, show_json_by_id, get_product_json, delete_product_ajax, mark_as_read, wishlistmodels
 
 app_name = 'wishlist'
 
@@ -15,4 +15,5 @@ urlpatterns = [
         "delete-product-ajax/<int:id>", delete_product_ajax, name="delete_product_ajax"
     ),
     path('mark-as-read/<int:book_id>/', mark_as_read, name='mark_as_read'),
+    path('wishlistmodels/', wishlistmodels, name='wishlist_models'),
 ]
