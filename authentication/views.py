@@ -15,11 +15,13 @@ def login(request):
     if user is not None:
         if user.is_active:
             auth_login(request, user)
+            is_superuser = request.user.is_superuser
             # Successful login status.
             return JsonResponse({
                 "username": user.username,
                 "status": True,
-                "message": "Login successful!"
+                "is_superuser" : is_superuser,
+                "message": "Login successful!",
                 # Add other data if you want to send data to Flutter.
             }, status=200)
         else:
