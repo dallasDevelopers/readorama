@@ -79,3 +79,22 @@ def get_product_json(request):
         })
 
     return JsonResponse(combined_data, safe=False)
+
+@csrf_exempt
+def delete_product_flutter(request, id):
+    try:
+        # Get product by ID
+        old_product = Wishlist.objects.get(pk=id)
+
+        # Delete the product
+        old_product.delete()
+
+        return JsonResponse({"status": "success"}, status=200)
+
+    except Wishlist.DoesNotExist:
+        # If the product with the given ID does not exist
+        return JsonResponse({"status": "error", "message": "Product not found"}, status=404)
+
+    except Exception as e:
+        # Handle other exceptions
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
