@@ -1,5 +1,5 @@
 from django.urls import path, include
-from main.views import show_main, register, login_user, logout_user, load_books, search_books, search_books_blank, addToWishlist, bookReaded, filter_books_by_category
+from main.views import show_main, register, login_user, logout_user, load_books, search_books, search_books_blank, addToWishlist, bookReaded, filter_books_by_category, search_booksflutter
 
 app_name = 'main'
 
@@ -14,4 +14,5 @@ urlpatterns = [
     path('add-to-wishlist/', addToWishlist, name='add_to_wishlist'),
     path('add-to-read/', bookReaded, name='book_read'),
     path('filter-books-by-category/', filter_books_by_category, name='filter_books_by_category'),
+    path('flutter/searchbooks/', search_booksflutter, name='search_booksflutter'),
 ]
