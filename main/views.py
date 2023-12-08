@@ -14,6 +14,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from landing_admin.views import show_main
 from wishlist.models import Wishlist
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -171,3 +172,27 @@ def filter_books_by_category(request):
         })
 
     return JsonResponse({'datas': book_data})
+
+@csrf_exempt
+def search_booksflutter(request):
+    search_term = request.GET.get('search_term', '')
+    filtered_books = Books.objects.filter(name__icontains=search_term)
+    
+    book_data = []
+    for book in filtered_books:
+        book_entry = {
+            "model": "main.books",
+            "pk": book.pk,
+            "fields": {
+                "name": book.name,
+                "author": book.author,
+                "rating": book.rating,
+                "num_review": book.num_review,
+                "price": book.price,
+                "year": book.year,
+                "genre": book.genre
+            }
+        }
+        book_data.append(book_entry)
+
+    return JsonResponse(book_data, safe=False)
