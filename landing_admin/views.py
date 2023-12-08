@@ -138,3 +138,23 @@ def add_product_flutter(request):
         return JsonResponse({"status": "success"}, status=200)
     else:
         return JsonResponse({"status": "error"}, status=401)
+    
+
+@csrf_exempt
+def delete_book_flutter(request, id):
+    try:
+        # Get product by ID
+        book = Books.objects.get(pk=id)
+
+        # Delete the product  
+        book.delete()
+
+        return JsonResponse({"status": "success"}, status=200)
+
+    except Books.DoesNotExist:
+        # If the product with the given ID does not exist
+        return JsonResponse({"status": "error", "message": "Book not found"}, status=404)
+
+    except Exception as e:
+        # Handle other exceptions
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
