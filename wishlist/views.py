@@ -96,6 +96,7 @@ def delete_product_ajax(request, id):
     product.delete()
     return HttpResponse(b"DELETED", status=201)
 
+@csrf_exempt
 @require_POST
 def mark_as_read(request, book_id):
     wishlist_item = Wishlist.objects.get(id=book_id)
@@ -104,20 +105,43 @@ def mark_as_read(request, book_id):
     return JsonResponse({'message': 'Book marked as read'})
 
 def wishlistmodels(request):
-    data = Wishlist.objects.all()
-    combined_data = []
+    if request.user:
+        data = Wishlist.objects.all()
+        combined_data = []
 
-    for item in data:
-        book = item.books
-        combined_data.append({
-            'book_id': book.pk,
-            'book_name': book.name,
-            'book_author': book.author,
-            'book_num_reviews': book.num_review,
-            'book_rating': book.rating,
-            'book_genre': book.genre,
-            'flag': item.flag,
-            'wishlist_id': item.pk,
-        })
+        for item in data:
+            book = item.books
+            combined_data.append({
+                'book_id': book.pk,
+                'book_name': book.name,
+                'book_author': book.author,
+                'book_num_reviews': book.num_review,
+                'book_rating': book.rating,
+                'book_genre': book.genre,
+                'flag': item.flag,
+                'wishlist_id': item.pk,
+            })
 
-    return JsonResponse(combined_data, safe=False)
+        return JsonResponse(combined_data, safe=False)
+    else:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+
+@csrf_exempt
+def delete_product_flutter(request, id):
+    try:
+        # Get product by ID
+        old_product = Wishlist.objects.get(pk=id)
+
+        # Delete the product
+        old_product.delete()
+
+        return JsonResponse({"status": "success"}, status=200)
+
+    except Wishlist.DoesNotExist:
+        # If the product with the given ID does not exist
+        return JsonResponse({"status": "error", "message": "Product not found"}, status=404)
+
+    except Exception as e:
+        # Handle other exceptions
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
