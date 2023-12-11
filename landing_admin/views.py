@@ -158,3 +158,33 @@ def delete_book_flutter(request, id):
     except Exception as e:
         # Handle other exceptions
         return JsonResponse({"status": "error", "message": str(e)}, status=500)
+    
+@csrf_exempt
+def edit_product_flutter(request, id):
+    try:
+        book = Books.objects.get(pk=id)
+    except Books.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Book not found'}, status=404)
+
+    if request.method == 'PUT':  # Check for PUT method
+        data = json.loads(request.body)  # Use request.body to get the data sent via PUT request
+
+        # Update book fields if data is available in the request
+        book.name = data.get("name", book.name)
+        book.author = data.get("author", book.author)
+        book.rating = float(data.get("rating", book.rating))
+        book.num_review = int(data.get("num_review", book.num_review))
+        book.price = int(data.get("price", book.price))
+        book.year = int(data.get("year", book.year))
+        book.genre = data.get("genre", book.genre)
+
+        book.save()
+
+        return JsonResponse({"status": "success", "message": "Book updated successfully"})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+    
+
+def load_books_by_id(request, id):
+    data = Books.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
