@@ -16,8 +16,10 @@ def login(request):
         if user.is_active:
             auth_login(request, user)
             is_superuser = request.user.is_superuser
+            user_id = user.id
             # Successful login status.
             return JsonResponse({
+                "user_id": user_id,
                 "username": user.username,
                 "status": True,
                 "is_superuser" : is_superuser,
