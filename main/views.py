@@ -196,3 +196,26 @@ def search_booksflutter(request):
         book_data.append(book_entry)
 
     return JsonResponse(book_data, safe=False)
+
+
+def addToWishlistFlutter(request):
+    if request.method == 'POST':
+        book_id = request.POST.get('book_id', '')
+        user = request.user
+
+        try:
+            
+            book = Books.objects.get(pk=book_id)
+            wishlist, created = Wishlist.objects.get_or_create(user=user, books=book, flag=False)
+
+            if created:
+                response_data = {'message': 'Book added to wishlist successfully'}
+            else:
+                response_data = {'message': 'Book is already in your wishlist'}
+
+        except Books.DoesNotExist:
+            response_data = {'message': 'Book not found'}
+
+        return JsonResponse(response_data)
+
+    return JsonResponse({'message': 'Invalid request method'})
