@@ -1,5 +1,5 @@
 from django.urls import path
-from review.views import show_reviews, add_reviews, delete_review, edit_review, get_review_json, get_book_id
+from review.views import show_reviews, add_reviews, delete_review, edit_review, get_review_json, get_book_id, get_review_json_flutter, delete_review_flutter, add_reviews_flutter, edit_review_flutter, load_review_id
 
 app_name = 'review'
 
@@ -9,5 +9,10 @@ urlpatterns = [
     path('delete/<int:id>', delete_review, name='delete_review'),
     path('edit-review/<int:id>', edit_review, name='edit_review'),
     path('get-review/', get_review_json, name='get_review_json'),
-    path('get-book/<int:id>', get_book_id, name='get_book_id' )
+    path('get-book/<int:id>', get_book_id, name='get_book_id' ),
+    path('get-review-flutter/', get_review_json_flutter, name='get_review_json_flutter' ),
+    path('delete-review-flutter/<int:id>', delete_review_flutter, name='delete_review_flutter' ),
+    path('add-review-flutter/', add_reviews_flutter, name='add_review_flutter' ),
+    path('edit-review-flutter/<int:id>', edit_review_flutter, name='edit_review_flutter' ), 
+    path('load-review-id/<int:id>', load_review_id, name='load_review_id' )
 ]

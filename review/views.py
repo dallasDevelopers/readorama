@@ -4,9 +4,11 @@ from review.models import Review
 from review.forms import ReviewForm, EditForm
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
-from main.models import Books
+from main.models import Books, User 
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
+import json
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 @login_required(login_url='/login')
@@ -94,6 +96,31 @@ def get_review_json(request):
         
     return JsonResponse(combined_data, safe=False)
 
+def get_review_json_flutter(request):
+    review_item = Review.objects.all()
+    review_count = review_item.count()
+    combined_data = []
+    
+    for item in review_item:
+        book = item.books
+        combined_data.append({
+            'book_id': book.pk,
+            'book_name': book.name,
+            'book_author': book.author,
+            'book_num_reviews': book.num_review,
+            'book_rating': book.rating,
+            'book_genre': book.genre,
+            'review_title': item.review_title,
+            'review': item.review,
+            'rating_new' : item.rating_new,
+            'review_count' : review_count,
+            'review_title': item.review_title,
+            'date_added': item.date_added,
+            'review_pk' : item.pk,
+        })
+        
+    return JsonResponse(combined_data, safe=False)
+
 @login_required(login_url='/login')
 def get_book_id(request, id):
     review_item = Review.objects.filter(pk=id)
@@ -118,3 +145,67 @@ def get_book_id(request, id):
         })
         
     return JsonResponse(combined_data, safe=False)
+
+
+@csrf_exempt
+def delete_review_flutter(request, id):
+    try:
+        # Get data by ID
+        review = Review.objects.get(pk=id)
+        # Delete data
+        review.delete()
+        # Return to the main page
+        return JsonResponse({"status": "sucess"}, status=200)
+    except Review.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Review not found"}, status=404)
+
+    except Exception as e:
+            # Handle other exceptions
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+
+@csrf_exempt
+def add_reviews_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+
+        new_review = Review.objects.create(
+            review_title= data["reviewTitle"],
+            review = data["review"],
+            rating_new= float(data["ratingNew"]),
+            books = Books.objects.get(pk=15),
+            user = User.objects.get(pk=1)
+
+                   
+        )
+        new_review.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
+@csrf_exempt
+def edit_review_flutter(request, id):
+    try:
+        review = Review.objects.get(pk=id)
+    except:
+        return JsonResponse({'status': 'error', 'message': 'Review not found'}, status=404)
+    
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        review.review_title = data.get("review_title", review.review_title)
+        review.review = data.get("review", review.review)
+        review.rating_new = data.get("rating_new", review.rating_new)
+        review.books = data.get("review", review.books)
+
+        review.save()
+
+        return JsonResponse({'status':'success', 'message':'Review successfully edited'})
+    return JsonResponse({'status': 'error', 'message':'Invalid request method'}, status=400)
+
+@csrf_exempt
+def load_review_id(request, id):
+    data = Review.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
