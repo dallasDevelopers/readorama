@@ -1,0 +1,50 @@
+name: Deploy
+
+on:
+  - push
+
+env:
+  CONTAINER_NAME: readorama
+  IMAGE_NAME: readorama
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+
+  deploy:
+    needs: publish
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Pull image and run container
+        uses: appleboy/ssh-action@v0.1.10
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        with:
+          host: ${{ secrets.GCP_HOST }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          key: ${{ secrets.GCP_KEY }}
+          envs: DOCKERHUB_USERNAME,CONTAINER_NAME,IMAGE_NAME
+          script: |
+            docker container rm -f $CONTAINER_NAME || true
+            docker image rm -f $DOCKERHUB_USERNAME/$IMAGE_NAME || true
+            docker run -d -p 80:8000 --name $CONTAINER_NAME $DOCKERHUB_USERNAME/$IMAGE_NAME
