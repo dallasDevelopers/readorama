@@ -24,7 +24,6 @@ def login(request):
                 "status": True,
                 "is_superuser" : is_superuser,
                 "message": "Login successful!",
-                # Add other data if you want to send data to Flutter.
             }, status=200)
         else:
             return JsonResponse({
