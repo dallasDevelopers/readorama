@@ -24,7 +24,6 @@ def login(request):
                 "status": True,
                 "is_superuser" : is_superuser,
                 "message": "Login successful!",
-                # Add other data if you want to send data to Flutter.
             }, status=200)
         else:
             return JsonResponse({
@@ -35,7 +34,7 @@ def login(request):
     else:
         return JsonResponse({
             "status": False,
-            "message": "Login failed, check email or password again."
+            "message": "Login failed, check username or password again."
         }, status=401)
     
 @csrf_exempt
