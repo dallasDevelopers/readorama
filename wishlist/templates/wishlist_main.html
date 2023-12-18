@@ -117,6 +117,7 @@
       htmlString += `
           <tbody>
             <tr>
+              <td>${item.book_id}</td> <!-- Access the book id from the 'id' field -->
               <td>${item.book_name}</td> <!-- Access the book name from the 'name' field -->
               <td>
                 <button type="submit" class="btn btn-success mark-as-read-button" data-book-id="${item.wishlist_id}" data-toggle="modal" data-target="#succModal">
