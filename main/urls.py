@@ -16,6 +16,6 @@ urlpatterns = [
     path('add-to-read/', bookReaded, name='book_read'),
     path('filter-books-by-category/', filter_books_by_category, name='filter_books_by_category'),
     path('flutter/searchbooks/', search_booksflutter, name='search_booksflutter'),
-    path('flutter/add-to-wishlist/', addToWishlistFlutter, name='addToWishlistFlutter'),
-    path('flutter/add-to-read/', markAsReadFlutter, name='addToWishlistFlutter'),
+    path('flutter/add-to-wishlist/', addToWishlistFlutter, name='add_to_wishlist_flutter'),
+    path('flutter/add-to-read/', markAsReadFlutter, name='mark_as_read_flutter'),
 ]
