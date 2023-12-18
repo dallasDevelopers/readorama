@@ -9,8 +9,6 @@ from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from review.models import Review
 import json
-
-
 from functools import wraps
 from django.http import HttpResponseForbidden
 
