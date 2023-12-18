@@ -15,5 +15,5 @@ urlpatterns = [
         "delete-product-ajax/<int:id>", delete_product_ajax, name="delete_product_ajax"
     ),
     path('mark-as-read/<int:book_id>/', mark_as_read, name='mark_as_read'),
-    path('wishlistmodels/', wishlistmodels, name='wishlist_models'),
+    path('wishlistmodels/<int:id>/', wishlistmodels, name='wishlist_models'),
 ]

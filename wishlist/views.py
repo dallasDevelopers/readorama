@@ -1,6 +1,6 @@
 from itertools import chain
 from django.shortcuts import render
-from wishlist.models import Wishlist 
+from wishlist.models import Wishlist, User
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.core import serializers
@@ -104,27 +104,26 @@ def mark_as_read(request, book_id):
     wishlist_item.save()
     return JsonResponse({'message': 'Book marked as read'})
 
-def wishlistmodels(request):
-    if request.user:
-        data = Wishlist.objects.all()
-        combined_data = []
+@csrf_exempt
+def wishlistmodels(request, id):
+    userData = User.objects.get(pk=id)
+    data = Wishlist.objects.filter(user=userData)
+    combined_data = []
 
-        for item in data:
-            book = item.books
-            combined_data.append({
-                'book_id': book.pk,
-                'book_name': book.name,
-                'book_author': book.author,
-                'book_num_reviews': book.num_review,
-                'book_rating': book.rating,
-                'book_genre': book.genre,
-                'flag': item.flag,
-                'wishlist_id': item.pk,
-            })
+    for item in data:
+        book = item.books
+        combined_data.append({
+            'book_id': book.pk,
+            'book_name': book.name,
+            'book_author': book.author,
+            'book_num_reviews': book.num_review,
+            'book_rating': book.rating,
+            'book_genre': book.genre,
+            'flag': item.flag,
+            'wishlist_id': item.pk,
+        })
 
-        return JsonResponse(combined_data, safe=False)
-    else:
-        return JsonResponse({"error": "User not authenticated"}, status=401)
+    return JsonResponse(combined_data, safe=False)
 
 @csrf_exempt
 def delete_product_flutter(request, id):
