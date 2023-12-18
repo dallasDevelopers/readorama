@@ -96,8 +96,9 @@ def get_review_json(request):
         
     return JsonResponse(combined_data, safe=False)
 
-def get_review_json_flutter(request):
-    review_item = Review.objects.all()
+def get_review_json_flutter(request, id):
+    userdata = User.objects.get(pk=id)
+    review_item = Review.objects.filter(user=userdata)
     review_count = review_item.count()
     combined_data = []
     
@@ -200,7 +201,7 @@ def edit_review_flutter(request, id):
         review.review_title = data.get("review_title", review.review_title)
         review.review = data.get("review", review.review)
         review.rating_new = data.get("rating_new", review.rating_new)
-        review.books = Books.objects.get(pk= data.get("review", review.books))
+        review.books = Books.objects.get(name= data.get("book_name", review.books))
 
         review.save()
 
