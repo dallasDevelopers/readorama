@@ -43,6 +43,7 @@ jobs:
           host: ${{ secrets.GCP_HOST }}
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           key: ${{ secrets.GCP_KEY }}
+          debug: true
           envs: DOCKERHUB_USERNAME,CONTAINER_NAME,IMAGE_NAME
           script: |
             docker container rm -f $CONTAINER_NAME || true
