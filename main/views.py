@@ -247,3 +247,7 @@ def markAsReadFlutter(request):
         return JsonResponse(response_data)
 
     return JsonResponse({'message': 'Invalid request method'})
+
+def show_wishlist(request):
+    wishlist = Wishlist.objects.all()
+    return HttpResponse(serializers.serialize("json", wishlist), content_type="application/json")
