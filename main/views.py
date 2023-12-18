@@ -223,7 +223,7 @@ def addToWishlistFlutter(request):
         return JsonResponse(response_data)
 
     return JsonResponse({'message': 'Invalid request method'})
-# test
+
 @csrf_exempt
 def markAsReadFlutter(request):
     if request.method == 'POST':
