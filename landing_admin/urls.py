@@ -1,7 +1,8 @@
 from django.urls import path
 from landing_admin.views import show_main, add_book_ajax, get_product_json
 from landing_admin.views import delete_ajax, get_book_by_id, edit_book, add_product_flutter \
-, delete_book_flutter, edit_product_flutter, load_books_by_id
+, delete_book_flutter, edit_product_flutter, load_books_by_id, search_books_flutter \
+, get_review_json_flutter, load_review_by_id, delete_book_flutter
 
 app_name = 'landing_admin'
 
@@ -16,4 +17,8 @@ urlpatterns = [
     path('delete-book-flutter/<int:id>', delete_book_flutter, name="delete_book_flutter"),
     path('edit-product-flutter/<int:id>', edit_product_flutter, name='edit_product_flutter'),
     path('loadbooks-by-id/<int:id>', load_books_by_id, name='loadbooks_by_id'),
+    path('search-books-flutter', search_books_flutter, name='search_books_flutter'),
+    path('load-all-review', get_review_json_flutter, name='load_all_review'),
+    path('delete-book-flutter/<int:id>', delete_book_flutter, name='delete_book_flutter'),
+    path('load-review-by-id/<int:id>', load_review_by_id, name='load_review_by_id'),
 ]

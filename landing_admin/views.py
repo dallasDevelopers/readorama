@@ -7,6 +7,7 @@ from landing_admin.forms import BookForm
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
+from review.models import Review
 import json
 
 
@@ -188,3 +189,100 @@ def edit_product_flutter(request, id):
 def load_books_by_id(request, id):
     data = Books.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+
+@csrf_exempt
+def search_books_flutter(request):
+    search_term = request.GET.get('search_term', '')
+    filtered_books = Books.objects.filter(name__icontains=search_term)
+    
+    book_data = []
+    for book in filtered_books:
+        book_entry = {
+            "model": "main.books",
+            "pk": book.pk,
+            "fields": {
+                "name": book.name,
+                "author": book.author,
+                "rating": book.rating,
+                "num_review": book.num_review,
+                "price": book.price,
+                "year": book.year,
+                "genre": book.genre
+            }
+        }
+        book_data.append(book_entry)
+
+    return JsonResponse(book_data, safe=False)
+
+
+
+# Admin review page which can RD Review
+def get_review_json_flutter(request):
+    review_item = Review.objects.get(all)
+    review_count = review_item.count()
+    combined_data = []
+    
+    for item in review_item:
+        book = item.books
+        combined_data.append({
+            'book_id': book.pk,
+            'book_name': book.name,
+            'book_author': book.author,
+            'book_num_reviews': book.num_review,
+            'book_rating': book.rating,
+            'book_genre': book.genre,
+            'review_title': item.review_title,
+            'review': item.review,
+            'rating_new' : item.rating_new,
+            'review_count' : review_count,
+            'review_title': item.review_title,
+            'date_added': item.date_added,
+            'review_pk' : item.pk,
+        })
+        
+    return JsonResponse(combined_data, safe=False)
+
+
+@csrf_exempt
+def delete_review_flutter(request, id):
+    try:
+        # Get data by ID
+        review = Review.objects.get(pk=id)
+        # Delete data
+        review.delete()
+        # Return to the main page
+        return JsonResponse({"status": "sucess"}, status=200)
+    except Review.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Review not found"}, status=404)
+
+    except Exception as e:
+            # Handle other exceptions
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
+
+@csrf_exempt
+def load_review_by_id(request, id):
+    review_item = Review.objects.filter(pk=id)
+    review_count = review_item.count()
+    combined_data = []
+
+    for item in review_item:
+        book = item.books
+        combined_data.append({
+            'book_id': book.pk,
+            'book_name': book.name,
+            'book_author': book.author,
+            'book_num_reviews': book.num_review,
+            'book_rating': book.rating,
+            'book_genre': book.genre,
+            'review_title': item.review_title,
+            'review': item.review,
+            'rating_new' : item.rating_new,
+            'review_count' : review_count,
+            'review_title': item.review_title,
+            'date_added': item.date_added,
+            'review_pk' : item.pk,
+        })
+
+    return JsonResponse(combined_data, safe=False)
