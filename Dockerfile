@@ -27,6 +27,7 @@ COPY . .
 
 RUN python manage.py collectstatic --noinput --clear
 RUN python manage.py migrate
+RUN python manage.py loaddata bookdatasjson.json
 
 # Create Django superuser
 RUN echo "from django.contrib.auth.models import User; User.objects.create_superuser('$DJANGO_SUPERUSER_USERNAME', '$DJANGO_SUPERUSER_EMAIL', '$DJANGO_SUPERUSER_PASSWORD')" | python manage.py shell
