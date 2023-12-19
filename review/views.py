@@ -166,7 +166,7 @@ def delete_review_flutter(request, id):
 
 
 @csrf_exempt
-def add_reviews_flutter(request):
+def add_reviews_flutter(request, id):
     if request.method == 'POST':
         
         data = json.loads(request.body)
@@ -175,9 +175,8 @@ def add_reviews_flutter(request):
             review_title= data["reviewTitle"],
             review = data["review"],
             rating_new= float(data["ratingNew"]),
-            books = Books.objects.get(pk=15),
-            user = User.objects.get(pk=1)
-
+            books = Books.objects.get(pk=id), 
+            user = User.objects.get(pk=data['user'])
                    
         )
         new_review.save()
@@ -235,3 +234,8 @@ def load_review_id(request, id):
         })
         
     return JsonResponse(combined_data, safe=False)
+
+def load_books_by_id(request, id):
+    data = Books.objects.get(pk=id)
+    book_name = data.name
+    return JsonResponse({'book_name': book_name}, status= 200)
