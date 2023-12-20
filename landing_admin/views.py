@@ -284,3 +284,22 @@ def load_review_by_id(request, id):
         })
 
     return JsonResponse(combined_data, safe=False)
+
+
+@csrf_exempt
+def load_books_by_id_flutter(request, id):
+
+    book_item = Books.objects.filter(pk=id)
+    combined_data = []
+    
+    for item in book_item:
+        combined_data.append({
+            'name': item.name,
+            'author': item.author,
+            'rating': item.rating,
+            'num_review': item.num_review,
+            'price': item.price,
+            'year': item.year,
+            'genre': item.genre,
+        })   
+    return JsonResponse(combined_data, safe=False)
