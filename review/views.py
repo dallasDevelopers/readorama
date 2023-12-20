@@ -186,12 +186,13 @@ def add_reviews_flutter(request, id):
         return JsonResponse({"status": "error"}, status=401)
     
 @csrf_exempt
+
 def edit_review_flutter(request, id):
     try:
         review = Review.objects.get(pk=id)
-    except:
+    except Review.DoesNotExist:
         return JsonResponse({'status': 'error', 'message': 'Review not found'}, status=404)
-    
+
     if request.method == 'POST':
         data = json.loads(request.body)
 
@@ -200,12 +201,22 @@ def edit_review_flutter(request, id):
         review.review_title = data.get("review_title", review.review_title)
         review.review = data.get("review", review.review)
         review.rating_new = data.get("rating_new", review.rating_new)
-        review.books = Books.objects.get(name= data.get("book_name", review.books))
+
+        book_name = data.get("book_name")
+        if book_name is not None:
+            try:
+                book = Books.objects.filter(name=book_name).first()
+                if book is not None:
+                    review.books = book
+                else:
+                    return JsonResponse({'status': 'error', 'message': 'Book not found'}, status=404)
+            except Books.MultipleObjectsReturned:
+                return JsonResponse({'status': 'error', 'message': 'Multiple books with the same name found'}, status=400)
 
         review.save()
 
         return JsonResponse({'status':'success', 'message':'Review successfully edited'})
-    
+
     return JsonResponse({'status': 'error', 'message':'Invalid request method'}, status=400)
 
 @csrf_exempt
