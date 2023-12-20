@@ -200,7 +200,7 @@ def edit_review_flutter(request, id):
         review.review_title = data.get("review_title", review.review_title)
         review.review = data.get("review", review.review)
         review.rating_new = data.get("rating_new", review.rating_new)
-        review.books = Books.objects.get(name= data.get("book_name", review.books))
+        review.books = Books.objects.filter(name= data.get("book_name", review.books))
 
         review.save()
 
