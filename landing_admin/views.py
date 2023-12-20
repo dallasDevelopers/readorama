@@ -217,7 +217,7 @@ def search_books_flutter(request):
 
 # Admin review page which can RD Review
 def get_review_json_flutter(request):
-    review_item = Review.objects.get(all)
+    review_item = Review.objects.all()
     review_count = review_item.count()
     combined_data = []
     
